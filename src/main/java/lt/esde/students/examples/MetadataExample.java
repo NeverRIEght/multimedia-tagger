@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package lt.esde.students;
+package lt.esde.students.examples;
 
 import java.io.File;
 import java.io.IOException;

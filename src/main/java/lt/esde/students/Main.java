@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 
 import static lt.esde.students.ExifUtil.writeExifTag;
-import static lt.esde.students.MetadataExample.metadataExample;
+import static lt.esde.students.examples.MetadataExample.metadataExample;
 
 public class Main {
     public static final String TEST_IMG_FOLDER_PATH = Paths.get("")
