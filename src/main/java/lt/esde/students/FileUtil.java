@@ -7,29 +7,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.imaging.ImageReadException;
-import org.apache.commons.imaging.ImageWriteException;
-import org.apache.commons.imaging.Imaging;
-import org.apache.commons.imaging.common.ImageMetadata;
-import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
-import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
-import org.apache.commons.imaging.formats.tiff.TiffField;
-import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
-import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
-import org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants;
-import org.apache.commons.imaging.formats.tiff.fieldtypes.FieldType;
-import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
-import org.apache.commons.imaging.formats.tiff.write.TiffOutputDirectory;
-import org.apache.commons.imaging.formats.tiff.write.TiffOutputField;
-import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
@@ -67,7 +47,7 @@ public class FileUtil {
 
         // TODO: ARE THIS COMPARISON IS USING F*CKING YEARS? WHY -4?
         // Return the older date
-        if(editTimeLocal.isBefore(creationTimeLocal)) {
+        if (editTimeLocal.isBefore(creationTimeLocal)) {
             return editTimeLocal;
         } else {
             return creationTimeLocal;
@@ -76,7 +56,12 @@ public class FileUtil {
 
     static String getFileExtension(File file) {
         // TODO: make this method private?
+
+        if(Objects.isNull(file)) {
+            throw new NullPointerException("The file is null");
+        }
+
         int index = file.getName().indexOf('.');
-        return index == -1 ? null : file.getName().substring(index);
+        return file.getName().substring(index);
     }
 }
