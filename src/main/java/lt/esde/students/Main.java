@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 
 import static lt.esde.students.ExifUtil.writeExifTag;
+import static lt.esde.students.MetadataExample.metadataExample;
 
 public class Main {
     public static final String TEST_IMG_FOLDER_PATH = Paths.get("")
@@ -26,5 +27,6 @@ public class Main {
         //example.setExifGPSTag(new File(TEST_IMG_WITHOUT_METADATA_PATH), new File(TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg"));
 
         writeExifTag(new File(TEST_IMG_WITHOUT_METADATA_PATH), TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg", 20);
+        metadataExample(new File(TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg"));
     }
 }

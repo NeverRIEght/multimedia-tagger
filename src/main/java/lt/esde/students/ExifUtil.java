@@ -112,7 +112,7 @@ public class ExifUtil {
 //                    String fieldData = "Hallo";
                     TiffOutputField imageDateTimeOriginal = new TiffOutputField(
                             ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL,
-                            FieldType.BYTE,
+                            FieldType.ASCII,
                             dateTimeString.length(),
                             dateTimeString.getBytes());
 
