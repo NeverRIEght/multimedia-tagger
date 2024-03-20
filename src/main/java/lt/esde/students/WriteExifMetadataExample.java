@@ -125,7 +125,7 @@ public class WriteExifMetadataExample {
 
     /**
      * This example illustrates how to remove a tag (if present) from EXIF metadata in a JPEG file.
-     *
+     * <p>
      * In this case, we remove the "aperture" tag from the EXIF metadata if present.
      *
      * @param jpegImageFile A source image file.

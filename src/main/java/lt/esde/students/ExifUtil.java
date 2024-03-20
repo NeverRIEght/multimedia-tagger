@@ -4,14 +4,11 @@ import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.ImageWriteException;
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.common.ImageMetadata;
-import org.apache.commons.imaging.common.RationalNumber;
 import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
 import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
-import org.apache.commons.imaging.formats.tiff.TiffContents;
 import org.apache.commons.imaging.formats.tiff.TiffField;
 import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
 import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
-import org.apache.commons.imaging.formats.tiff.constants.TiffConstants;
 import org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants;
 import org.apache.commons.imaging.formats.tiff.fieldtypes.FieldType;
 import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
@@ -20,7 +17,6 @@ import org.apache.commons.imaging.formats.tiff.write.TiffOutputField;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
 
 import java.io.*;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -30,22 +26,22 @@ import java.util.Date;
 import java.util.Objects;
 
 import static lt.esde.students.FileUtil.getCreationDateTime;
-import static lt.esde.students.FileUtil.getFileExtension;
-import static lt.esde.students.Main.*;
+import static lt.esde.students.Main.TEST_IMG_FOLDER_PATH;
+import static lt.esde.students.Main.TEST_IMG_WITH_METADATA_PATH;
 
 public class ExifUtil {
 
     public static final int DATE_TIME_ORIGINAL = 0x9003;
+
     public static ImageMetadata getMetadata(File inputImage) throws IOException, ImageReadException {
         return Imaging.getMetadata(inputImage);
     }
 
 
     /**
-     *
-     * @param inputImage File with input image
+     * @param inputImage  File with input image
      * @param outputImage Path to which output image will be exported
-     * @param exifTag int value, TagID
+     * @param exifTag     int value, TagID
      * @return <Code>true</Code> if the Exif tag exists before and <Code>false</Code> otherwise
      * @throws IOException
      * @throws ImageReadException
@@ -54,15 +50,15 @@ public class ExifUtil {
     public static boolean writeExifTag(final File inputImage, final String outputImage, final int exifTag) throws IOException, ImageReadException, ParseException {
         boolean returnValue = false;
 
-        if(Objects.isNull(inputImage)) {
+        if (Objects.isNull(inputImage)) {
             throw new NullPointerException("inputImage is null");
         }
 
-        if(outputImage.isEmpty()) {
+        if (outputImage.isEmpty()) {
             throw new NullPointerException("outputImage is not defined");
         }
 
-        try (FileOutputStream fos = new FileOutputStream(new File(outputImage));
+        try (FileOutputStream fos = new FileOutputStream(outputImage);
              OutputStream os = new BufferedOutputStream(fos)) {
 
             TiffOutputSet outputSet = null;
@@ -94,35 +90,32 @@ public class ExifUtil {
                 outputSet = new TiffOutputSet();
             }
 
-            if (outputSet != null) {
+            // check if field already EXISTS - if so remove
+            TiffOutputField imageHistoryPre = outputSet.findField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
+            if (imageHistoryPre != null) {
+                System.out.println("REMOVE");
+                outputSet.removeField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
+            }
+            // add field
+            try {
 
-                // check if field already EXISTS - if so remove
-                TiffOutputField imageHistoryPre = outputSet.findField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
-                if (imageHistoryPre != null) {
-                    System.out.println("REMOVE");
-                    outputSet.removeField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
-                }
-                // add field
-                try {
-
-                    LocalDateTime dateTime = getCreationDateTime(inputImage.getAbsolutePath());
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                    String dateTimeString = dateTime.format(formatter);
+                LocalDateTime dateTime = getCreationDateTime(inputImage.getAbsolutePath());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String dateTimeString = dateTime.format(formatter);
 
 //                    String fieldData = "Hallo";
-                    TiffOutputField imageDateTimeOriginal = new TiffOutputField(
-                            ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL,
-                            FieldType.ASCII,
-                            dateTimeString.length(),
-                            dateTimeString.getBytes());
+                TiffOutputField imageDateTimeOriginal = new TiffOutputField(
+                        ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL,
+                        FieldType.ASCII,
+                        dateTimeString.length(),
+                        dateTimeString.getBytes());
 
-                    TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
-                    exifDirectory.removeField(DATE_TIME_ORIGINAL);
-                    exifDirectory.add(imageDateTimeOriginal);
-                    new ExifRewriter().updateExifMetadataLossless(inputImage, os, outputSet);
-                } catch (ImageWriteException e) {
-                    e.printStackTrace();
-                }
+                TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
+                exifDirectory.removeField(DATE_TIME_ORIGINAL);
+                exifDirectory.add(imageDateTimeOriginal);
+                new ExifRewriter().updateExifMetadataLossless(inputImage, os, outputSet);
+            } catch (ImageWriteException e) {
+                e.printStackTrace();
             }
 
         } catch (ImageWriteException e) {
@@ -131,7 +124,6 @@ public class ExifUtil {
 
         return returnValue;
     }
-
 
 
     public static void updateHourOnFile(String inputFileName, String outputFileName, int hourChange) throws ImageReadException, IOException, ParseException, ImageWriteException {
@@ -152,7 +144,7 @@ public class ExifUtil {
             System.out.println("new date time: " + cal.getTime());
 
             TiffOutputSet outputSet = null;
-            try (FileOutputStream fos = new FileOutputStream(new File(outputFileName)); OutputStream os = new BufferedOutputStream(fos)) {
+            try (FileOutputStream fos = new FileOutputStream(outputFileName); OutputStream os = new BufferedOutputStream(fos)) {
                 final TiffImageMetadata exif = jpegMetadata.getExif();
                 outputSet = exif.getOutputSet();
                 if (outputSet != null) {

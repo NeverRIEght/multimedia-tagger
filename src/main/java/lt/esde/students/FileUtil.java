@@ -57,7 +57,7 @@ public class FileUtil {
     static String getFileExtension(File file) {
         // TODO: make this method private?
 
-        if(Objects.isNull(file)) {
+        if (Objects.isNull(file)) {
             throw new NullPointerException("The file is null");
         }
 
