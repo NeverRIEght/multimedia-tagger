@@ -4,11 +4,14 @@ import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.ImageWriteException;
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.common.ImageMetadata;
+import org.apache.commons.imaging.common.RationalNumber;
 import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
 import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
 import org.apache.commons.imaging.formats.tiff.TiffContents;
 import org.apache.commons.imaging.formats.tiff.TiffField;
 import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
+import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
+import org.apache.commons.imaging.formats.tiff.constants.TiffConstants;
 import org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants;
 import org.apache.commons.imaging.formats.tiff.fieldtypes.FieldType;
 import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
@@ -20,10 +23,13 @@ import java.io.*;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
+import static lt.esde.students.FileUtil.getCreationDateTime;
 import static lt.esde.students.FileUtil.getFileExtension;
 import static lt.esde.students.Main.*;
 
@@ -35,8 +41,19 @@ public class ExifUtil {
     }
 
 
+    /**
+     *
+     * @param inputImage File with input image
+     * @param outputImage Path to which output image will be exported
+     * @param exifTag int value, TagID
+     * @return <Code>true</Code> if the Exif tag exists before and <Code>false</Code> otherwise
+     * @throws IOException
+     * @throws ImageReadException
+     * @throws ParseException
+     */
+    public static boolean writeExifTag(final File inputImage, final String outputImage, final int exifTag) throws IOException, ImageReadException, ParseException {
+        boolean returnValue = false;
 
-    public static boolean writeExifTag(File inputImage, String outputImage, int exifTag) throws IOException, ImageReadException, ParseException {
         if(Objects.isNull(inputImage)) {
             throw new NullPointerException("inputImage is null");
         }
@@ -45,25 +62,74 @@ public class ExifUtil {
             throw new NullPointerException("outputImage is not defined");
         }
 
-        // TODO: Add every single exifTag
-        // TODO: Find out file extension and proceed accordingly
+        try (FileOutputStream fos = new FileOutputStream(new File(outputImage));
+             OutputStream os = new BufferedOutputStream(fos)) {
 
-//        if(getFileExtension(inputImage).equals(".jpg")) {
-//
-//        }
+            TiffOutputSet outputSet = null;
 
-        if(exifTag == DATE_TIME_ORIGINAL) {
-            final ImageMetadata metadata = getMetadata(inputImage);
+            final ImageMetadata metadata = Imaging.getMetadata(inputImage);
+            final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
+            if (null != jpegMetadata) {
+                // note that exif might be null if no Exif metadata is found.
+                final TiffImageMetadata exif = jpegMetadata.getExif();
 
-            if(Objects.isNull(metadata)) {
-                // TODO: Create new empty set of metadata
-            } else {
-                // TODO: Parse the system field "creation date", than copy it to metadata
-
+                if (null != exif) {
+                    // TiffImageMetadata class is immutable (read-only).
+                    // TiffOutputSet class represents the Exif data to write.
+                    //
+                    // Usually, we want to update existing Exif metadata by
+                    // changing
+                    // the values of a few fields, or adding a field.
+                    // In these cases, it is easiest to use getOutputSet() to
+                    // start with a "copy" of the fields read from the image.
+                    outputSet = exif.getOutputSet();
+                    returnValue = true;
+                }
             }
+
+            // if file does not contain any exif metadata, we create an empty
+            // set of exif metadata. Otherwise, we keep all of the other
+            // existing tags.
+            if (null == outputSet) {
+                outputSet = new TiffOutputSet();
+            }
+
+            if (outputSet != null) {
+
+                // check if field already EXISTS - if so remove
+                TiffOutputField imageHistoryPre = outputSet.findField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
+                if (imageHistoryPre != null) {
+                    System.out.println("REMOVE");
+                    outputSet.removeField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
+                }
+                // add field
+                try {
+
+                    LocalDateTime dateTime = getCreationDateTime(inputImage.getAbsolutePath());
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    String dateTimeString = dateTime.format(formatter);
+
+//                    String fieldData = "Hallo";
+                    TiffOutputField imageDateTimeOriginal = new TiffOutputField(
+                            ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL,
+                            FieldType.BYTE,
+                            dateTimeString.length(),
+                            dateTimeString.getBytes());
+
+                    TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
+                    exifDirectory.removeField(DATE_TIME_ORIGINAL);
+                    exifDirectory.add(imageDateTimeOriginal);
+                    new ExifRewriter().updateExifMetadataLossless(inputImage, os, outputSet);
+                } catch (ImageWriteException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (ImageWriteException e) {
+            throw new RuntimeException(e);
         }
 
-        return true;
+        return returnValue;
     }
 
 
