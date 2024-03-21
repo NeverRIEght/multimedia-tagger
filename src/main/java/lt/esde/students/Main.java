@@ -23,13 +23,21 @@ public class Main {
 //        File inputImage = new File("D:\\Test.jpg"); // Good
 //        File inputImage = new File("D:\\Test.png"); // Exception: png has no exif support :(
 
-        writeExifTagDateTimeOriginal(new File(TEST_IMG_WITHOUT_METADATA_PATH),
-                TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg");
+//        writeExifTagDateTimeOriginal(new File(TEST_IMG_WITHOUT_METADATA_PATH),
+//                TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg");
+//
 
-        String dateTime = readExifTag(new File(TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg"),
+//
+//        HashMap<String, String> exifTags = readExifTags(new File(TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg"));
+//        System.out.println(exifTags);
+
+        writeExifTag(new File(TEST_IMG_WITHOUT_METADATA_PATH),
+                     TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg",
+                     ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL,
+                     "2020.06.06 10:01:03");
+
+                String dateTime = readExifTag(new File(TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg"),
                 ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
-
-        HashMap<String, String> exifTags = readExifTags(new File(TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg"));
-        System.out.println(exifTags);
+        System.out.println(dateTime);
     }
 }

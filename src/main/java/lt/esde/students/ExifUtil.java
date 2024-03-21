@@ -102,6 +102,89 @@ public class ExifUtil {
         return returnValue;
     }
 
+    public static boolean writeExifTag(final File inputImage, final String outputImage, TagInfo tagInfo, String contents) {
+        // check for nulls
+        // get metadata
+        // get field
+        // delete field if needed
+        // determine new field parameters
+        // write new field
+
+        boolean returnValue = false;
+
+        if (Objects.isNull(inputImage)) {
+            throw new NullPointerException("inputImage is null");
+        } else if (Objects.isNull(outputImage)) {
+            throw new NullPointerException("outputImage is null");
+        } else if (Objects.isNull(tagInfo)) {
+            throw new NullPointerException("tagInfo is null");
+        } else if (contents.isEmpty()) {
+            throw new NullPointerException("contents is empty");
+        }
+
+        try (FileOutputStream fos = new FileOutputStream(outputImage);
+             OutputStream os = new BufferedOutputStream(fos)) {
+
+            TiffOutputSet outputSet = null;
+
+            final ImageMetadata metadata = Imaging.getMetadata(inputImage);
+            final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
+            if (null != jpegMetadata) {
+                // note that exif might be null if no Exif metadata is found.
+                final TiffImageMetadata exif = jpegMetadata.getExif();
+
+                if (null != exif) {
+                    // TiffImageMetadata class is immutable (read-only).
+                    // TiffOutputSet class represents the Exif data to write.
+                    //
+                    // Usually, we want to update existing Exif metadata by
+                    // changing
+                    // the values of a few fields, or adding a field.
+                    // In these cases, it is easiest to use getOutputSet() to
+                    // start with a "copy" of the fields read from the image.
+                    outputSet = exif.getOutputSet();
+                    returnValue = true;
+                }
+            }
+
+            // if file does not contain any exif metadata, we create an empty
+            // set of exif metadata. Otherwise, we keep all the other
+            // existing tags.
+            if (null == outputSet) {
+                outputSet = new TiffOutputSet();
+            }
+
+            // check if field already EXISTS - if so remove
+            TiffOutputField imageHistoryPre = outputSet.findField(tagInfo);
+            if (imageHistoryPre != null) {
+                System.out.println("REMOVE");
+                outputSet.removeField(tagInfo);
+            }
+
+            // add field
+
+            // contents parsing
+
+            // parser: tagInfo -> fieldType
+
+
+            TiffOutputField outputField = new TiffOutputField(
+                    tagInfo,
+                    tagInfo.dataTypes.getFirst(),
+                    contents.length(),
+                    contents.getBytes());
+
+            TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
+            exifDirectory.removeField(tagInfo);
+            exifDirectory.add(outputField);
+            new ExifRewriter().updateExifMetadataLossless(inputImage, os, outputSet);
+        } catch (ImageWriteException | ImageReadException | IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return returnValue;
+    }
+
     public static String readExifTag(final File fromFile, TagInfo tagInfo) {
         try {
             final ImageMetadata metadata = Imaging.getMetadata(fromFile);
