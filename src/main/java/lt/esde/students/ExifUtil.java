@@ -101,17 +101,16 @@ public class ExifUtil {
     }
 
     public static String readExifTag(final File fromFile, TagInfo tagInfo) {
-        final ImageMetadata metadata;
         try {
-            metadata = Imaging.getMetadata(fromFile);
+            final ImageMetadata metadata = Imaging.getMetadata(fromFile);
             if (metadata instanceof JpegImageMetadata) {
                 final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
 
                 final TiffField field = jpegMetadata.findEXIFValueWithExactMatch(tagInfo);
                 if (field == null) {
-                    return tagInfo.name + ":" + "null";
+                    return null;
                 } else {
-                    return tagInfo.name + ":" + field.getValueDescription();
+                    return field.getValueDescription();
                 }
             }
         } catch (ImageReadException | IOException e) {
