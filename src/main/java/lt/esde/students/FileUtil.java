@@ -19,7 +19,7 @@ public class FileUtil {
 
     public static void convertToTiff() {
         // TODO: Metadata does not transfer correctly
-        // TODO: Transform this method inc according of polymorphism: convert any-to-any (photo formats)
+        // TODO: Transform this method according of polymorphism: convert any-to-any (photo formats)
         File inputFile = new File(TEST_IMG_FOLDER_PATH + File.separator + "eifel.jpg");
         File outputFile = new File(TEST_IMG_FOLDER_PATH + File.separator + "Test.tiff");
         try (InputStream is = new FileInputStream(inputFile)) {
