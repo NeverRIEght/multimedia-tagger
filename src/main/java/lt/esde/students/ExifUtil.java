@@ -26,91 +26,26 @@ import static lt.esde.students.FileUtil.getCreationDateTime;
 
 public class ExifUtil {
 
-    public static boolean writeExifTagDateTimeOriginal(final File inputImage, final String outputImage) throws IOException {
+    public static boolean writeExifTagDateTimeOriginal(final File inputImage,
+                                                       final String outputImage) throws Exception {
         LocalDateTime dateTimeToWrite = getCreationDateTime(inputImage.getAbsolutePath());
         return writeExifTagDateTimeOriginal(inputImage, outputImage, dateTimeToWrite);
     }
 
-    public static boolean writeExifTagDateTimeOriginal(final File inputImage, final String outputImage, LocalDateTime dateTimeToWrite) {
-        boolean returnValue = false;
+    public static boolean writeExifTagDateTimeOriginal(final File inputImage,
+                                                       final String outputImage,
+                                                       final LocalDateTime dateTimeToWrite) throws Exception {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String dateTimeString = dateTimeToWrite.format(formatter);
 
-        if (Objects.isNull(inputImage)) {
-            throw new NullPointerException("inputImage is null");
-        } else if (outputImage.isEmpty()) {
-            throw new NullPointerException("outputImage is not defined");
-        } else if (Objects.isNull(dateTimeToWrite)) {
-            throw new NullPointerException("dateTimeToWrite is null");
-        }
-
-        try (FileOutputStream fos = new FileOutputStream(outputImage);
-             OutputStream os = new BufferedOutputStream(fos)) {
-
-            TiffOutputSet outputSet = null;
-
-            final ImageMetadata metadata = Imaging.getMetadata(inputImage);
-            final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
-            if (null != jpegMetadata) {
-                // note that exif might be null if no Exif metadata is found.
-                final TiffImageMetadata exif = jpegMetadata.getExif();
-
-                if (null != exif) {
-                    // TiffImageMetadata class is immutable (read-only).
-                    // TiffOutputSet class represents the Exif data to write.
-                    //
-                    // Usually, we want to update existing Exif metadata by
-                    // changing
-                    // the values of a few fields, or adding a field.
-                    // In these cases, it is easiest to use getOutputSet() to
-                    // start with a "copy" of the fields read from the image.
-                    outputSet = exif.getOutputSet();
-                    returnValue = true;
-                }
-            }
-
-            // if file does not contain any exif metadata, we create an empty
-            // set of exif metadata. Otherwise, we keep all the other
-            // existing tags.
-            if (null == outputSet) {
-                outputSet = new TiffOutputSet();
-            }
-
-            // check if field already EXISTS - if so remove
-            TiffOutputField imageHistoryPre = outputSet.findField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
-            if (imageHistoryPre != null) {
-                System.out.println("REMOVE");
-                outputSet.removeField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
-            }
-
-            // add field
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String dateTimeString = dateTimeToWrite.format(formatter);
-
-            TiffOutputField imageDateTimeOriginal = new TiffOutputField(
-                    ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL,
-                    FieldType.ASCII,
-                    dateTimeString.length(),
-                    dateTimeString.getBytes());
-
-            TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
-            exifDirectory.removeField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
-            exifDirectory.add(imageDateTimeOriginal);
-            new ExifRewriter().updateExifMetadataLossless(inputImage, os, outputSet);
-        } catch (ImageWriteException | ImageReadException | IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return returnValue;
+        return writeExifTag(inputImage, outputImage, ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL, dateTimeString);
     }
 
-    public static boolean writeExifTag(final File inputImage, final String outputImage, TagInfo tagInfo, String contents) {
-        // check for nulls
-        // get metadata
-        // get field
-        // delete field if needed
-        // determine new field parameters
-        // write new field
-
-        boolean returnValue = false;
+    public static boolean writeExifTag(final File inputImage,
+                                       final String outputImage,
+                                       final TagInfo tagInfo,
+                                       final String contents) throws Exception {
+        // TODO: contents parsing???
 
         if (Objects.isNull(inputImage)) {
             throw new NullPointerException("inputImage is null");
@@ -129,48 +64,36 @@ public class ExifUtil {
 
             final ImageMetadata metadata = Imaging.getMetadata(inputImage);
             final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
-            if (null != jpegMetadata) {
-                // note that exif might be null if no Exif metadata is found.
-                final TiffImageMetadata exif = jpegMetadata.getExif();
 
+            if (null != jpegMetadata) {
+                final TiffImageMetadata exif = jpegMetadata.getExif();
                 if (null != exif) {
-                    // TiffImageMetadata class is immutable (read-only).
-                    // TiffOutputSet class represents the Exif data to write.
-                    //
-                    // Usually, we want to update existing Exif metadata by
-                    // changing
-                    // the values of a few fields, or adding a field.
-                    // In these cases, it is easiest to use getOutputSet() to
-                    // start with a "copy" of the fields read from the image.
                     outputSet = exif.getOutputSet();
-                    returnValue = true;
                 }
             }
 
-            // if file does not contain any exif metadata, we create an empty
-            // set of exif metadata. Otherwise, we keep all the other
-            // existing tags.
             if (null == outputSet) {
                 outputSet = new TiffOutputSet();
             }
 
-            // check if field already EXISTS - if so remove
+
             TiffOutputField imageHistoryPre = outputSet.findField(tagInfo);
             if (imageHistoryPre != null) {
                 System.out.println("REMOVE");
                 outputSet.removeField(tagInfo);
             }
 
-            // add field
-
-            // contents parsing
-
-            // parser: tagInfo -> fieldType
+            FieldType fieldType;
+            if(tagInfo.dataTypes.size() == 1) {
+                fieldType = tagInfo.dataTypes.getFirst();
+            } else {
+                throw new Exception("This type of field is not supported");
+            }
 
 
             TiffOutputField outputField = new TiffOutputField(
                     tagInfo,
-                    tagInfo.dataTypes.getFirst(),
+                    fieldType,
                     contents.length(),
                     contents.getBytes());
 
@@ -178,23 +101,21 @@ public class ExifUtil {
             exifDirectory.removeField(tagInfo);
             exifDirectory.add(outputField);
             new ExifRewriter().updateExifMetadataLossless(inputImage, os, outputSet);
+
+            return (null != readExifTag(new File(outputImage), tagInfo));
         } catch (ImageWriteException | ImageReadException | IOException e) {
             throw new RuntimeException(e);
         }
-
-        return returnValue;
     }
 
-    public static String readExifTag(final File fromFile, TagInfo tagInfo) {
+    public static String readExifTag(final File fromFile, final TagInfo tagInfo) {
         try {
             final ImageMetadata metadata = Imaging.getMetadata(fromFile);
             if (metadata instanceof JpegImageMetadata) {
                 final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
 
                 final TiffField field = jpegMetadata.findEXIFValueWithExactMatch(tagInfo);
-                if (field == null) {
-                    return null;
-                } else {
+                if (field != null) {
                     return field.getValueDescription();
                 }
             }

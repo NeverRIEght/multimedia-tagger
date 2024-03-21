@@ -19,7 +19,7 @@ public class FileUtil {
 
     public static void convertToTiff() {
         // TODO: Metadata does not transfer correctly
-        // TODO: Transform this method in according of polymorphism: convert any-to-any (photo formats)
+        // TODO: Transform this method inc according of polymorphism: convert any-to-any (photo formats)
         File inputFile = new File(TEST_IMG_FOLDER_PATH + File.separator + "eifel.jpg");
         File outputFile = new File(TEST_IMG_FOLDER_PATH + File.separator + "Test.tiff");
         try (InputStream is = new FileInputStream(inputFile)) {
@@ -45,7 +45,7 @@ public class FileUtil {
         LocalDateTime editTimeLocal = LocalDateTime.ofInstant(editTime.toInstant(), ZoneId.systemDefault());
 
 
-        // TODO: ARE THIS COMPARISON IS USING F*CKING YEARS? WHY -4?
+        // TODO: are this comparison working for the dates with the same year?
         // Return the older date
         if (editTimeLocal.isBefore(creationTimeLocal)) {
             return editTimeLocal;
