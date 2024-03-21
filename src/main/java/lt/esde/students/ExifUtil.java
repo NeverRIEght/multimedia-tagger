@@ -22,8 +22,6 @@ import static lt.esde.students.FileUtil.getCreationDateTime;
 
 public class ExifUtil {
 
-    public static final int DATE_TIME_ORIGINAL = 0x9003;
-
     public static boolean writeExifTagDateTimeOriginal(final File inputImage, final String outputImage) throws IOException {
         LocalDateTime dateTimeToWrite = getCreationDateTime(inputImage.getAbsolutePath());
         return writeExifTagDateTimeOriginal(inputImage, outputImage, dateTimeToWrite);
@@ -90,7 +88,7 @@ public class ExifUtil {
                     dateTimeString.getBytes());
 
             TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
-            exifDirectory.removeField(DATE_TIME_ORIGINAL);
+            exifDirectory.removeField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
             exifDirectory.add(imageDateTimeOriginal);
             new ExifRewriter().updateExifMetadataLossless(inputImage, os, outputSet);
         } catch (ImageWriteException | ImageReadException | IOException e) {
@@ -99,4 +97,6 @@ public class ExifUtil {
 
         return returnValue;
     }
+
+
 }
