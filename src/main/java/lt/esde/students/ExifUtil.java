@@ -14,7 +14,6 @@ import org.apache.commons.imaging.formats.tiff.write.TiffOutputField;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
 
 import java.io.*;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -25,29 +24,20 @@ public class ExifUtil {
 
     public static final int DATE_TIME_ORIGINAL = 0x9003;
 
-    public static ImageMetadata getMetadata(File inputImage) throws IOException, ImageReadException {
-        return Imaging.getMetadata(inputImage);
+    public static boolean writeExifTagDateTimeOriginal(final File inputImage, final String outputImage) throws IOException {
+        LocalDateTime dateTimeToWrite = getCreationDateTime(inputImage.getAbsolutePath());
+        return writeExifTagDateTimeOriginal(inputImage, outputImage, dateTimeToWrite);
     }
 
-
-    /**
-     * @param inputImage  File with input image
-     * @param outputImage Path to which output image will be exported
-     * @param exifTag     int value, TagID
-     * @return <Code>true</Code> if the Exif tag exists before and <Code>false</Code> otherwise
-     * @throws IOException
-     * @throws ImageReadException
-     * @throws ParseException
-     */
-    public static boolean writeExifTag(final File inputImage, final String outputImage, final int exifTag) throws IOException, ImageReadException, ParseException {
+    public static boolean writeExifTagDateTimeOriginal(final File inputImage, final String outputImage, LocalDateTime dateTimeToWrite) {
         boolean returnValue = false;
 
         if (Objects.isNull(inputImage)) {
             throw new NullPointerException("inputImage is null");
-        }
-
-        if (outputImage.isEmpty()) {
+        } else if (outputImage.isEmpty()) {
             throw new NullPointerException("outputImage is not defined");
+        } else if (Objects.isNull(dateTimeToWrite)) {
+            throw new NullPointerException("dateTimeToWrite is null");
         }
 
         try (FileOutputStream fos = new FileOutputStream(outputImage);
@@ -76,7 +66,7 @@ public class ExifUtil {
             }
 
             // if file does not contain any exif metadata, we create an empty
-            // set of exif metadata. Otherwise, we keep all of the other
+            // set of exif metadata. Otherwise, we keep all the other
             // existing tags.
             if (null == outputSet) {
                 outputSet = new TiffOutputSet();
@@ -88,27 +78,22 @@ public class ExifUtil {
                 System.out.println("REMOVE");
                 outputSet.removeField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
             }
+
             // add field
-            try {
-                LocalDateTime dateTime = getCreationDateTime(inputImage.getAbsolutePath());
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                String dateTimeString = dateTime.format(formatter);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String dateTimeString = dateTimeToWrite.format(formatter);
 
-                TiffOutputField imageDateTimeOriginal = new TiffOutputField(
-                        ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL,
-                        FieldType.ASCII,
-                        dateTimeString.length(),
-                        dateTimeString.getBytes());
+            TiffOutputField imageDateTimeOriginal = new TiffOutputField(
+                    ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL,
+                    FieldType.ASCII,
+                    dateTimeString.length(),
+                    dateTimeString.getBytes());
 
-                TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
-                exifDirectory.removeField(DATE_TIME_ORIGINAL);
-                exifDirectory.add(imageDateTimeOriginal);
-                new ExifRewriter().updateExifMetadataLossless(inputImage, os, outputSet);
-            } catch (ImageWriteException e) {
-                e.printStackTrace();
-            }
-
-        } catch (ImageWriteException e) {
+            TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
+            exifDirectory.removeField(DATE_TIME_ORIGINAL);
+            exifDirectory.add(imageDateTimeOriginal);
+            new ExifRewriter().updateExifMetadataLossless(inputImage, os, outputSet);
+        } catch (ImageWriteException | ImageReadException | IOException e) {
             throw new RuntimeException(e);
         }
 
