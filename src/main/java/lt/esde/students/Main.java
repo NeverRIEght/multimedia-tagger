@@ -5,9 +5,9 @@ import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
-import static lt.esde.students.ExifUtil.readExifTag;
-import static lt.esde.students.ExifUtil.writeExifTagDateTimeOriginal;
+import static lt.esde.students.ExifUtil.*;
 
 public class Main {
     public static final String TEST_IMG_FOLDER_PATH = Paths.get("")
@@ -29,6 +29,7 @@ public class Main {
         String dateTime = readExifTag(new File(TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg"),
                 ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
 
-        System.out.println(dateTime);
+        HashMap<String, String> exifTags = readExifTags(new File(TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg"));
+        System.out.println(exifTags);
     }
 }

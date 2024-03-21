@@ -18,6 +18,8 @@ import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import static lt.esde.students.FileUtil.getCreationDateTime;
@@ -118,5 +120,27 @@ public class ExifUtil {
         }
 
         return null;
+    }
+
+    public static HashMap<String, String> readExifTags(final File fromFile) {
+
+        HashMap<String, String> tagsMap = new HashMap<>();
+
+        try {
+            final ImageMetadata metadata = Imaging.getMetadata(fromFile);
+            if (metadata instanceof JpegImageMetadata) {
+                final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
+                final List<ImageMetadata.ImageMetadataItem> items = jpegMetadata.getItems();
+
+                for (final ImageMetadata.ImageMetadataItem item : items) {
+                    String tagString = item.toString();
+                    tagsMap.put(tagString.substring(0, tagString.indexOf(":")), tagString.substring(tagString.indexOf(":") + 2));
+                }
+            }
+        } catch (ImageReadException | IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return tagsMap;
     }
 }
