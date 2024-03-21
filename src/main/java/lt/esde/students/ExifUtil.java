@@ -6,9 +6,11 @@ import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.common.ImageMetadata;
 import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
 import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
+import org.apache.commons.imaging.formats.tiff.TiffField;
 import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
 import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
 import org.apache.commons.imaging.formats.tiff.fieldtypes.FieldType;
+import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputDirectory;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputField;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
@@ -98,5 +100,24 @@ public class ExifUtil {
         return returnValue;
     }
 
+    public static String readExifTag(final File fromFile, TagInfo tagInfo) {
+        final ImageMetadata metadata;
+        try {
+            metadata = Imaging.getMetadata(fromFile);
+            if (metadata instanceof JpegImageMetadata) {
+                final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
 
+                final TiffField field = jpegMetadata.findEXIFValueWithExactMatch(tagInfo);
+                if (field == null) {
+                    return tagInfo.name + ":" + "null";
+                } else {
+                    return tagInfo.name + ":" + field.getValueDescription();
+                }
+            }
+        } catch (ImageReadException | IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
 }
