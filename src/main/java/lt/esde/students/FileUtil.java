@@ -34,6 +34,13 @@ public class FileUtil {
         }
     }
 
+    /**
+     * Parse the file located in <code>pathToFile</code> and return the oldest of dates in file attributes
+     * <p>
+     * @param pathToFile Path of file to parse
+     * @return The oldest date from the file attributes as <Code>LocalDateTime</Code>
+     * @throws IOException In case if the file does not exist
+     */
     public static LocalDateTime getCreationDateTime(String pathToFile) throws IOException {
         Path path = Paths.get(pathToFile);
 
@@ -60,7 +67,6 @@ public class FileUtil {
         if (Objects.isNull(file)) {
             throw new NullPointerException("The file is null");
         }
-
 
         int index = file.getName().indexOf('.');
         return file.getName().substring(index);
