@@ -25,13 +25,30 @@ import java.util.Objects;
 import static lt.esde.students.FileUtil.getCreationDateTime;
 
 public class ExifUtil {
-
+    /**
+     * Writes DateTimeOriginal (0x9003) EXIF tag with the oldest date from file attributes
+     * <p>
+     * @param inputImage <code>File</code> of the image to write into
+     * @param outputImage <code>String</code> of the export path
+     * @return true if the field written successfully, false otherwise
+     * @throws Exception in case inputImage does not exist
+     * @see lt.esde.students.FileUtil#getCreationDateTime(String)
+     */
     public static boolean writeExifTagDateTimeOriginal(final File inputImage,
                                                        final String outputImage) throws Exception {
         LocalDateTime dateTimeToWrite = getCreationDateTime(inputImage.getAbsolutePath());
         return writeExifTagDateTimeOriginal(inputImage, outputImage, dateTimeToWrite);
     }
 
+    /**
+     * Writes DateTimeOriginal (0x9003) EXIF tag with the date provided
+     * <p>
+     * @param inputImage <code>File</code> of the image to write into
+     * @param outputImage <code>String</code> of the export path
+     * @param dateTimeToWrite <code>LocalDateTime</code> of the date to write
+     * @return true if the field written successfully, false otherwise
+     * @throws Exception in case inputImage does not exist
+     */
     public static boolean writeExifTagDateTimeOriginal(final File inputImage,
                                                        final String outputImage,
                                                        final LocalDateTime dateTimeToWrite) throws Exception {
@@ -41,6 +58,17 @@ public class ExifUtil {
         return writeExifTag(inputImage, outputImage, ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL, dateTimeString);
     }
 
+    /**
+     * Writes the <code>String</code> provided to the EXIF tag field of the provided file
+     * <p><code>false</code> return can indicate the problem with the formatting of <code>contents</code>
+     * <p>
+     * @param inputImage <code>File</code> of the image to write into
+     * @param outputImage <code>String</code> of the export path
+     * @param tagInfo <code>TagInfo</code> of the EXIF tag to write
+     * @param contents <code>String</code> with the value to write to EXIF
+     * @return true if the field written successfully, false otherwise
+     * @throws Exception if something went wrong
+     */
     public static boolean writeExifTag(final File inputImage,
                                        final String outputImage,
                                        final TagInfo tagInfo,
