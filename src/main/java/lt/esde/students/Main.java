@@ -1,6 +1,8 @@
 package lt.esde.students;
 
 import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
+import org.apache.commons.imaging.formats.tiff.constants.TiffEpTagConstants;
+import org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -35,15 +37,26 @@ public class Main {
 
         //parseOffsetTimeOriginal()
 
-        //String offsetTimeOriginal = readExifTag(paramFile, )
+        // TODO: can contain 1 or 2 values. Parse? What is the pattern?
+        // 1. The time zone offset of DateTimeOriginal from GMT in hours
+        // 2. If present, the time zone offset of ModifyDate
+        String offsetTimeOriginal = readExifTag(paramFile, TiffEpTagConstants.EXIF_TAG_TIME_ZONE_OFFSET);
 
         //parseModifyDate()
+
+        String modifyDate = readExifTag(paramFile, TiffTagConstants.TIFF_TAG_DATE_TIME);
+
         //parseOffsetTime()
 
-        // TODO: is this the right constant?
-        //String offsetTime = readExifTag(paramFile, ExifTagConstants.EXIF_TAG_EXIF_OFFSET);
+        // TODO: can contain 1 or 2 values. Parse? What is the pattern?
+        // 1. The time zone offset of DateTimeOriginal from GMT in hours
+        // 2. If present, the time zone offset of ModifyDate
+        String offsetTime = readExifTag(paramFile, TiffEpTagConstants.EXIF_TAG_TIME_ZONE_OFFSET);
 
         //parseExifImageWidth()
+
+
+
         //parseExifImageHeight()
         //parseOriginalDefaultFinalSize()
         //parseOriginalBestQualitySize()
@@ -52,7 +65,8 @@ public class Main {
         //parseImageHistory()
         //parseImageDescription()
 
-        System.out.println(0x9010);
+        System.out.println(0x882a);
+        System.out.println(0x9011);
 
     }
 }
