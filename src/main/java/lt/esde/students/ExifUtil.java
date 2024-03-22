@@ -25,13 +25,31 @@ import java.util.Objects;
 import static lt.esde.students.FileUtil.getCreationDateTime;
 
 public class ExifUtil {
-
+    /**
+     * Writes DateTimeOriginal (0x9003) EXIF tag with the oldest date from file attributes
+     * <p>
+     * @param inputImage <code>File</code> of the image to write into
+     * @param outputImage <code>String</code> of the export path
+     * @return true if the field written successfully, false otherwise
+     * @throws Exception in case inputImage does not exist
+     * @see lt.esde.students.FileUtil#getCreationDateTime(String)
+     */
     public static boolean writeExifTagDateTimeOriginal(final File inputImage,
                                                        final String outputImage) throws Exception {
         LocalDateTime dateTimeToWrite = getCreationDateTime(inputImage.getAbsolutePath());
         return writeExifTagDateTimeOriginal(inputImage, outputImage, dateTimeToWrite);
     }
 
+    /**
+     * Writes DateTimeOriginal (0x9003) EXIF tag with the date provided
+     * <p>
+     * @param inputImage <code>File</code> of the image to write into
+     * @param outputImage <code>String</code> of the export path
+     * @param dateTimeToWrite <code>LocalDateTime</code> of the date to write
+     * @return true if the field written successfully, false otherwise
+     * @throws Exception in case inputImage does not exist
+     * @see LocalDateTime
+     */
     public static boolean writeExifTagDateTimeOriginal(final File inputImage,
                                                        final String outputImage,
                                                        final LocalDateTime dateTimeToWrite) throws Exception {
@@ -41,6 +59,18 @@ public class ExifUtil {
         return writeExifTag(inputImage, outputImage, ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL, dateTimeString);
     }
 
+    /**
+     * Writes the <code>String</code> provided to the EXIF tag field of the provided file
+     * <p><code>false</code> return can indicate the problem with the formatting of <code>contents</code>
+     * <p>
+     * @param inputImage <code>File</code> of the image to write into
+     * @param outputImage <code>String</code> of the export path
+     * @param tagInfo <code>TagInfo</code> of the EXIF tag to write
+     * @param contents <code>String</code> with the value to write to EXIF
+     * @return true if the field written successfully, false otherwise
+     * @throws Exception if something went wrong
+     * @see ExifTagConstants
+     */
     public static boolean writeExifTag(final File inputImage,
                                        final String outputImage,
                                        final TagInfo tagInfo,
@@ -108,6 +138,14 @@ public class ExifUtil {
         }
     }
 
+    /**
+     * Parses the specific EXIF tag to <code>String</code>
+     * <p>
+     * @param fromFile file to parse
+     * @param tagInfo <code>TagInfo</code> of the EXIF tag to read
+     * @return <code>String</code> with the data found. Might be null in case the field is empty
+     * @see ExifTagConstants
+     */
     public static String readExifTag(final File fromFile, final TagInfo tagInfo) {
         try {
             final ImageMetadata metadata = Imaging.getMetadata(fromFile);
@@ -126,6 +164,12 @@ public class ExifUtil {
         return null;
     }
 
+    /**
+     * Parses the whole set of EXIF tags for specific file and returns it as a <code>Hashmap</code>
+     * <p>
+     * @param fromFile file to parse
+     * @return <code>Hashmap</code> of the non-null fields set. Might be null if the set is empty
+     */
     public static HashMap<String, String> readExifTags(final File fromFile) {
 
         HashMap<String, String> tagsMap = new HashMap<>();
