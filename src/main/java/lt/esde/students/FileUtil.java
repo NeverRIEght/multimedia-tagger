@@ -61,6 +61,7 @@ public class FileUtil {
             throw new NullPointerException("The file is null");
         }
 
+
         int index = file.getName().indexOf('.');
         return file.getName().substring(index);
     }
