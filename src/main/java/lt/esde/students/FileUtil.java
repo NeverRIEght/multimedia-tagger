@@ -73,7 +73,7 @@ public class FileUtil {
      * @return file extension as a <code>String</code>
      * @see File
      */
-    static String getFileExtension(File file) {
+    public static String getFileExtension(File file) {
         // TODO: make this method private?
 
         if (Objects.isNull(file)) {

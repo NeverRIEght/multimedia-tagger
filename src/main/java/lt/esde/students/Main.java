@@ -1,7 +1,18 @@
 package lt.esde.students;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
+
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.stream.Collectors;
+
+import static lt.esde.students.ExifUtil.parseFileMetata;
 
 public class Main {
     /**
@@ -23,6 +34,28 @@ public class Main {
             .toAbsolutePath() + File.separator + "testimg" + File.separator + "maricat.jpg";
 
     public static void main(String[] args) throws Exception {
+
+        HashMap<String, String> tagsMap = parseFileMetata(new File(TEST_IMG_WITH_METADATA_PATH));
+
+        String mapContent = tagsMap.entrySet()
+                .stream()
+                .map(e -> e.getKey() + "->" + e.getValue())
+                .collect(Collectors.joining("\n"));
+
+        System.out.println(mapContent);
+
+
+        Metadata metadata = ImageMetadataReader.readMetadata(new File(TEST_IMG_WITH_METADATA_PATH));
+
+        Iterable<Directory> directories = metadata.getDirectories();
+        Iterator<Directory> iterator = directories.iterator();
+        while (iterator.hasNext()) {
+            Directory dir = iterator.next();
+            Collection<Tag> tags = dir.getTags();
+            for (Tag tag : tags) {
+                System.out.println(tag.getTagName() + " - " + tag.getDescription() + " - " + tag.getTagTypeHex());
+            }
+        }
 
     }
 }
