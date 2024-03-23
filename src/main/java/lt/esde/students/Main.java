@@ -1,6 +1,7 @@
 package lt.esde.students;
 
 import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
+import org.apache.commons.imaging.formats.tiff.constants.MicrosoftTagConstants;
 import org.apache.commons.imaging.formats.tiff.constants.TiffEpTagConstants;
 import org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants;
 
@@ -55,18 +56,28 @@ public class Main {
 
         //parseExifImageWidth()
 
-
+        String imageWidth = readExifTag(paramFile, ExifTagConstants.EXIF_TAG_EXIF_IMAGE_WIDTH);
 
         //parseExifImageHeight()
+
+        String imageHeight = readExifTag(paramFile, ExifTagConstants.EXIF_TAG_EXIF_IMAGE_LENGTH);
+
         //parseOriginalDefaultFinalSize()
         //parseOriginalBestQualitySize()
+
         //parseXPAuthor()
+
+        String author = readExifTag(paramFile, MicrosoftTagConstants.EXIF_TAG_XPAUTHOR);
+
         //parseSoftware()
+
+        String software = readExifTag(paramFile, ExifTagConstants.EXIF_TAG_SOFTWARE);
+
         //parseImageHistory()
         //parseImageDescription()
 
-        System.out.println(0x882a);
-        System.out.println(0x9011);
+        System.out.println(0xc792);
+        System.out.println(32767);
 
     }
 }
