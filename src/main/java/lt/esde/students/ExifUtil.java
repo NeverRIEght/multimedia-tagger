@@ -9,6 +9,9 @@ import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
 import org.apache.commons.imaging.formats.tiff.TiffField;
 import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
 import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
+import org.apache.commons.imaging.formats.tiff.constants.MicrosoftTagConstants;
+import org.apache.commons.imaging.formats.tiff.constants.TiffEpTagConstants;
+import org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants;
 import org.apache.commons.imaging.formats.tiff.fieldtypes.FieldType;
 import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputDirectory;
@@ -188,6 +191,57 @@ public class ExifUtil {
         } catch (ImageReadException | IOException e) {
             throw new RuntimeException(e);
         }
+
+        return tagsMap;
+    }
+
+    public static HashMap<String, String> parseFileMetata(final File fromFile) {
+        HashMap<String, String> tagsMap = new HashMap<>();
+
+        //parseDateTimeOriginal()
+
+        String dateTimeOriginal = readExifTag(fromFile, ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
+        tagsMap.put("DateTimeOriginal", dateTimeOriginal);
+
+        //parseOffsetTimeOriginal()
+
+        String timeZoneOffset = readExifTag(fromFile, TiffEpTagConstants.EXIF_TAG_TIME_ZONE_OFFSET);
+        tagsMap.put("TimeZoneOffset", timeZoneOffset);
+
+        //parseModifyDate()
+
+        String modifyDate = readExifTag(fromFile, TiffTagConstants.TIFF_TAG_DATE_TIME);
+        tagsMap.put("ModifyDate", modifyDate);
+
+        //parseExifImageWidth()
+
+        String imageWidth = readExifTag(fromFile, ExifTagConstants.EXIF_TAG_EXIF_IMAGE_WIDTH);
+        tagsMap.put("ExifImageWidth", imageWidth);
+
+        //parseExifImageHeight()
+
+        String imageHeight = readExifTag(fromFile, ExifTagConstants.EXIF_TAG_EXIF_IMAGE_LENGTH);
+        tagsMap.put("ExifImageHeight", imageHeight);
+
+        //parseXPAuthor()
+
+        String author = readExifTag(fromFile, MicrosoftTagConstants.EXIF_TAG_XPAUTHOR);
+        tagsMap.put("XPAuthor", author);
+
+        //parseSoftware()
+
+        String software = readExifTag(fromFile, ExifTagConstants.EXIF_TAG_SOFTWARE);
+        tagsMap.put("Software", software);
+
+        //parseImageHistory()
+
+        String imageHistory = readExifTag(fromFile, TiffEpTagConstants.EXIF_TAG_IMAGE_HISTORY_EXIF_IFD);
+        tagsMap.put("ImageHistory", imageHistory);
+
+        //parseImageDescription()
+
+        String imageDescription = readExifTag(fromFile, TiffTagConstants.TIFF_TAG_IMAGE_DESCRIPTION);
+        tagsMap.put("ImageDescription", imageDescription);
 
         return tagsMap;
     }
