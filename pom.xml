@@ -8,6 +8,8 @@
     <artifactId>multimedia-tagger</artifactId>
     <version>0.1</version>
 
+
+
     <build>
         <plugins>
             <plugin>
@@ -38,6 +40,15 @@
             <artifactId>metadata-extractor</artifactId>
             <version>2.19.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.dragon66</groupId>
+            <artifactId>icafe</artifactId>
+            <version>1.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/icafe.jar</systemPath>
+        </dependency>
+
 
     </dependencies>
 
