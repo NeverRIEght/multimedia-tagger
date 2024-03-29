@@ -1,4 +1,6 @@
-package lt.esde.students.Entities;
+package lt.esde.students.entities;
+
+import java.time.LocalDateTime;
 
 public class ExifMetadata {
 
