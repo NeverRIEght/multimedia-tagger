@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.stream.Collectors;
 
-import static lt.esde.students.ExifUtil.parseFileMetata;
+import static lt.esde.students.ExifUtil.parseFileMetadata;
 
 public class Main {
     /**
@@ -35,7 +35,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        HashMap<String, String> tagsMap = parseFileMetata(new File(TEST_IMG_WITH_METADATA_PATH));
+        HashMap<String, String> tagsMap = parseFileMetadata(new File(TEST_IMG_WITH_METADATA_PATH));
 
         String mapContent = tagsMap.entrySet()
                 .stream()
