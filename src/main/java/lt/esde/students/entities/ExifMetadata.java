@@ -1,7 +1,14 @@
 package lt.esde.students.Entities;
 
 public class ExifMetadata {
-    private int timeZoneOffset;
+
+    private LocalDateTime dateTimeOriginal;
+
+    private LocalDateTime createDate;
+
+    private LocalDateTime modifyDate;
+
+    private Integer timeZoneOffset;
 
     private String imageHistory;
 
@@ -9,24 +16,65 @@ public class ExifMetadata {
 
     private int exifImageHeight;
 
+    private String xpAuthor;
+
     private String software;
 
     private String imageDescription;
 
-    public ExifMetadata(int timeZoneOffset, String imageHistory, int exifImageWidth, int exifImageHeight, String software, String imageDescription) {
+    public ExifMetadata() { }
+
+    public ExifMetadata(LocalDateTime dateTimeOriginal,
+                        LocalDateTime createDate,
+                        LocalDateTime modifyDate,
+                        Integer timeZoneOffset,
+                        String imageHistory,
+                        int exifImageWidth,
+                        int exifImageHeight,
+                        String xpAuthor,
+                        String software,
+                        String imageDescription) {
+        this.dateTimeOriginal = dateTimeOriginal;
+        this.createDate = createDate;
+        this.modifyDate = modifyDate;
         this.timeZoneOffset = timeZoneOffset;
         this.imageHistory = imageHistory;
         this.exifImageWidth = exifImageWidth;
         this.exifImageHeight = exifImageHeight;
+        this.xpAuthor = xpAuthor;
         this.software = software;
         this.imageDescription = imageDescription;
     }
 
-    public int getTimeZoneOffset() {
+    public LocalDateTime getDateTimeOriginal() {
+        return dateTimeOriginal;
+    }
+
+    public void setDateTimeOriginal(LocalDateTime dateTimeOriginal) {
+        this.dateTimeOriginal = dateTimeOriginal;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public LocalDateTime getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(LocalDateTime modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public Integer getTimeZoneOffset() {
         return timeZoneOffset;
     }
 
-    public void setTimeZoneOffset(int timeZoneOffset) {
+    public void setTimeZoneOffset(Integer timeZoneOffset) {
         this.timeZoneOffset = timeZoneOffset;
     }
 
@@ -52,6 +100,14 @@ public class ExifMetadata {
 
     public void setExifImageHeight(int exifImageHeight) {
         this.exifImageHeight = exifImageHeight;
+    }
+
+    public String getXpAuthor() {
+        return xpAuthor;
+    }
+
+    public void setXpAuthor(String xpAuthor) {
+        this.xpAuthor = xpAuthor;
     }
 
     public String getSoftware() {
