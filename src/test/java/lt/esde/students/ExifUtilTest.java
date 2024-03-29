@@ -12,6 +12,8 @@ import java.time.format.DateTimeFormatter;
 
 class ExifUtilTest {
 
+
+
     @Test
     void writeExifTagDateTimeOriginalFileNotFound()  {
 
@@ -24,11 +26,20 @@ class ExifUtilTest {
     }
 
     @Test
-    void writeExifTagDateTimeOriginalFile()  {
- final File inputFile = new File("testimg/eifel.jpg");
- /*String outputImage = "image_with_exif.jpg";
+    void writeExifTagDateTimeOriginalFile() throws Exception  {
+ File inputFile = new File("testimg/eifel.jpg");
+ String outputImage = "image_with_exif.jpg";
  boolean result= ExifUtil.writeExifTagDateTimeOriginal(inputFile,outputImage);
- assertTrue(true);*/
+ assertTrue(true);
+
+    }
+
+    @Test
+    void writeExifTagDateTimeOriginalFileIncorrectData() throws Exception  {
+        File inputFile = new File("exif.tsss");
+        String outputImage = "image_with_exif.jpg";
+        boolean result= ExifUtil.writeExifTagDateTimeOriginal(inputFile,outputImage);
+        assertTrue(true);
 
     }
 
