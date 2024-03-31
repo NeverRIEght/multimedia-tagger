@@ -8,11 +8,7 @@ import com.drew.metadata.Tag;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.stream.Collectors;
-
-import static lt.esde.students.ExifUtil.parseFileMetadata;
 
 public class Main {
     /**
@@ -34,17 +30,6 @@ public class Main {
             .toAbsolutePath() + File.separator + "testimg" + File.separator + "maricat.jpg";
 
     public static void main(String[] args) throws Exception {
-
-        HashMap<String, String> tagsMap = parseFileMetadata(new File(TEST_IMG_WITH_METADATA_PATH));
-
-        String mapContent = tagsMap.entrySet()
-                .stream()
-                .map(e -> e.getKey() + "->" + e.getValue())
-                .collect(Collectors.joining("\n"));
-
-        System.out.println(mapContent);
-
-
         Metadata metadata = ImageMetadataReader.readMetadata(new File(TEST_IMG_WITH_METADATA_PATH));
 
         Iterable<Directory> directories = metadata.getDirectories();

@@ -1,5 +1,6 @@
 package lt.esde.students;
 
+import lt.esde.students.metadata.ExifWriter;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -15,7 +16,7 @@ class ExifUtilTest {
         File inputImage = new File("non_existent_image.jpg");
         String outputImage = "output/image_with_exif.jpg";
         assertThrows(IOException.class, () -> {
-            ExifUtil.writeExifTagDateTimeOriginal(inputImage, outputImage);
+            ExifWriter.writeExifTagDateTimeOriginal(inputImage, outputImage);
         });
     }
 
@@ -23,7 +24,7 @@ class ExifUtilTest {
     void writeExifTagDateTimeOriginalFile() throws Exception {
         File inputFile = new File("testimg/eifel.jpg");
         String outputImage = "image_with_exif.jpg";
-        boolean result = ExifUtil.writeExifTagDateTimeOriginal(inputFile, outputImage);
+        boolean result = ExifWriter.writeExifTagDateTimeOriginal(inputFile, outputImage);
         assertTrue(true);
     }
 
@@ -31,7 +32,7 @@ class ExifUtilTest {
     void writeExifTagDateTimeOriginalFileIncorrectData() throws Exception {
         File inputFile = new File("exif.tsss");
         String outputImage = "image_with_exif.jpg";
-        boolean result = ExifUtil.writeExifTagDateTimeOriginal(inputFile, outputImage);
+        boolean result = ExifWriter.writeExifTagDateTimeOriginal(inputFile, outputImage);
         assertTrue(true);
     }
 

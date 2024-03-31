@@ -18,7 +18,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-import static lt.esde.students.ExifUtil.readExifTag;
+import static lt.esde.students.metadata.ExifReader.readExifTag;
+
 
 public class ExifWriter {
     /**
