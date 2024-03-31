@@ -185,7 +185,6 @@ public class ExifUtil {
      * @return <code>Hashmap</code> of the non-null fields set. Might be null if the set is empty
      */
     public static HashMap<String, String> readExifTags(final File fromFile) {
-
         HashMap<String, String> tagsMap = new HashMap<>();
 
         try {
@@ -206,7 +205,9 @@ public class ExifUtil {
         return tagsMap;
     }
 
-    public static HashMap<String, String> parseFileMetata(final File fromFile) throws ImageProcessingException, IOException {
+    public static HashMap<String, String> parseFileMetadata(final File fromFile) throws ImageProcessingException, IOException {
+
+
         HashMap<String, String> tagsMap = new HashMap<>();
 
         //parseDateTimeOriginal()

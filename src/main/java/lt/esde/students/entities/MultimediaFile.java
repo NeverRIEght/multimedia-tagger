@@ -1,4 +1,4 @@
-package lt.esde.students.Entities;
+package lt.esde.students.entities;
 
 import java.io.File;
 import java.time.LocalDateTime;
