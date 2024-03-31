@@ -22,10 +22,6 @@ public class FileUtil {
      * @see LocalDateTime
      */
     public static LocalDateTime getCreationDateTime(String pathToFile) throws IOException {
-        // TODO: Rename
-        // TODO: Move to entities.ImageFile
-        // TODO: Support for various date fields
-        // TODO: Test for various dates, with same year, month, date, etc.
         Path path = Paths.get(pathToFile);
 
         BasicFileAttributes attributes = Files.readAttributes(path, BasicFileAttributes.class);

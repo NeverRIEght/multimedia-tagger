@@ -49,9 +49,6 @@ public class ExifReader {
      * @return <code>Hashmap</code> of the non-null fields set. Might be null if the set is empty
      */
     public static HashMap<String, String> readExifTags(final File fromFile) {
-        //TODO: Rewrite using both commons imaging and metadata-extractor lib with duplicates deletion
-        //TODO: getAllDates() based on this method
-        //TODO: getOldestDate() based on this method
         HashMap<String, String> tagsMap = new HashMap<>();
 
         try {
