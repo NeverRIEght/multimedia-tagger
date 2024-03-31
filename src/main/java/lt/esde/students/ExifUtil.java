@@ -35,22 +35,6 @@ import static lt.esde.students.Main.TEST_IMG_WITH_METADATA_PATH;
 
 public class ExifUtil {
     /**
-     * Writes DateTimeOriginal (0x9003) EXIF tag with the oldest date from file attributes
-     * <p>
-     *
-     * @param inputImage  <code>File</code> of the image to write into
-     * @param outputImage <code>String</code> of the export path
-     * @return true if the field written successfully, false otherwise
-     * @throws Exception in case inputImage does not exist
-     * @see lt.esde.students.FileUtil#getCreationDateTime(String)
-     */
-    public static boolean writeExifTagDateTimeOriginal(final File inputImage,
-                                                       final String outputImage) throws Exception {
-        LocalDateTime dateTimeToWrite = getCreationDateTime(inputImage.getAbsolutePath());
-        return writeExifTagDateTimeOriginal(inputImage, outputImage, dateTimeToWrite);
-    }
-
-    /**
      * Writes DateTimeOriginal (0x9003) EXIF tag with the date provided
      * <p>
      *
