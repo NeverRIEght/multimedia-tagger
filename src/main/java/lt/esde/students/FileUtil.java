@@ -1,7 +1,7 @@
 package lt.esde.students;
 
-import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,10 +10,6 @@ import java.nio.file.attribute.FileTime;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Objects;
-
-import javax.imageio.ImageIO;
-
-import static lt.esde.students.Main.*;
 
 public class FileUtil {
     /**
@@ -25,6 +21,10 @@ public class FileUtil {
      * @see LocalDateTime
      */
     public static LocalDateTime getCreationDateTime(String pathToFile) throws IOException {
+        // TODO: Rename
+        // TODO: Move to entities.ImageFile
+        // TODO: Support for various date fields
+        // TODO: Test for various dates, with same year, month, date, etc.
         Path path = Paths.get(pathToFile);
 
         BasicFileAttributes attributes = Files.readAttributes(path, BasicFileAttributes.class);
@@ -34,8 +34,6 @@ public class FileUtil {
         LocalDateTime creationTimeLocal = LocalDateTime.ofInstant(creationTime.toInstant(), ZoneId.systemDefault());
         LocalDateTime editTimeLocal = LocalDateTime.ofInstant(editTime.toInstant(), ZoneId.systemDefault());
 
-
-        // TODO: are this comparison working for the dates with the same year?
         // Return the older date
         if (editTimeLocal.isBefore(creationTimeLocal)) {
             return editTimeLocal;
