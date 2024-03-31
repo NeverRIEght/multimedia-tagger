@@ -17,6 +17,7 @@ import static lt.esde.students.Main.*;
 
 public class FileUtil {
 
+
     /**
      * Converts an image file from its own format to tiff format
      */
