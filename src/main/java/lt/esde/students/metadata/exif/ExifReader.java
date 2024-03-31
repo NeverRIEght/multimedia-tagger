@@ -1,4 +1,4 @@
-package lt.esde.students.metadata;
+package lt.esde.students.metadata.exif;
 
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;

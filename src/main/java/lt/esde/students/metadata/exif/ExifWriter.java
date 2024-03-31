@@ -1,4 +1,4 @@
-package lt.esde.students.metadata;
+package lt.esde.students.metadata.exif;
 
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.ImageWriteException;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-import static lt.esde.students.metadata.ExifReader.readExifTag;
+import static lt.esde.students.metadata.exif.ExifReader.readExifTag;
 
 
 public class ExifWriter {

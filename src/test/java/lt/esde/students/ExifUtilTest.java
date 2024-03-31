@@ -1,6 +1,6 @@
 package lt.esde.students;
 
-import lt.esde.students.metadata.ExifWriter;
+import lt.esde.students.metadata.exif.ExifWriter;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
