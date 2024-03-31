@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import static lt.esde.students.FileUtil.getCreationDateTime;
 import static lt.esde.students.Main.TEST_IMG_WITH_METADATA_PATH;
 
 public class ExifUtil {
@@ -56,7 +55,7 @@ public class ExifUtil {
 
     /**
      * Writes the <code>String</code> provided to the EXIF tag field of the provided file
-     * <p><code>false</code> return can indicate the problem with the formatting of <code>contents</code>
+     * <p>If the return is <code>false</code>, it indicates that there is a problem with the formatting of <code>contents</code>
      * <p>
      *
      * @param inputImage  <code>File</code> of the image to write into
