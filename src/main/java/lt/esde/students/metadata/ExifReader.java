@@ -51,6 +51,7 @@ public class ExifReader {
     public static HashMap<String, String> readExifTags(final File fromFile) {
         //TODO: Rewrite using both commons imaging and metadata-extractor lib with duplicates deletion
         //TODO: getAllDates() based on this method
+        //TODO: getOldestDate() based on this method
         HashMap<String, String> tagsMap = new HashMap<>();
 
         try {
