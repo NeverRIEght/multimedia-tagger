@@ -21,7 +21,7 @@ class FileUtilTest {
     @Test
     void getFileExtensionTxt() {
         File testTxtFile = new File("Example.txt");
-        assertEquals(".txt", FileUtil.getFileExtension(testTxtFile));
+        assertEquals("txt", FileUtil.getFileExtension(testTxtFile));
 
     }
 
@@ -30,28 +30,28 @@ class FileUtilTest {
         File testExeFile = new File("ExeFile.exe");
 
         File testNullFile = null;
-        assertEquals(".exe", FileUtil.getFileExtension(testExeFile));
+        assertEquals("exe", FileUtil.getFileExtension(testExeFile));
     }
 
     @Test
     void getFileWithoutException() {
         File testWithoutExceptionFile = new File("FileWithoutException");
 
-        assertEquals("Incorrect File", FileUtil.getFileExtension(testWithoutExceptionFile));
+        assertEquals("", FileUtil.getFileExtension(testWithoutExceptionFile));
     }
 
     @Test
     void getFileExtensionWitchSpace() {
         File testFileWitchSpace = new File("File witch space.txt");
 
-        assertEquals(".txt", FileUtil.getFileExtension(testFileWitchSpace));
+        assertEquals("txt", FileUtil.getFileExtension(testFileWitchSpace));
     }
 
     @Test
     void getFileExtensionWitchDoublePoint() {
         File testFileWitchDoublePoint = new File("FileWitchDoublePoint..txt");
 
-        assertEquals(".txt", FileUtil.getFileExtension(testFileWitchDoublePoint));
+        assertEquals("txt", FileUtil.getFileExtension(testFileWitchDoublePoint));
     }
 
     @Test
