@@ -15,6 +15,7 @@ public class FileUtil {
     /**
      * Parse the file located in <code>pathToFile</code> and return the oldest of dates in file attributes
      * <p>
+     *
      * @param pathToFile Path of file to parse
      * @return The oldest date from the file attributes as a <code>LocalDateTime</code>
      * @throws IOException In case if the file does not exist
@@ -44,20 +45,24 @@ public class FileUtil {
 
     /**
      * Returns extension of the provided file as a <code>String</code>
-     * <p>Examples of return: ".exe", ".txt", etc.
+     * <p>If there is no extension, method will return empty <code>String</code>
+     * <p>Examples of return: "exe", "txt", etc.
      * <p>
+     *
      * @param file <code>File</code> to get extension of
-     * @return file extension as a <code>String</code>
+     * @return <code>File</code> extension as a <code>String</code>.
      * @see File
      */
     public static String getFileExtension(File file) {
-        // TODO: make this method private?
-
         if (Objects.isNull(file)) {
             throw new NullPointerException("The file is null");
         }
 
-        int index = file.getName().indexOf('.');
-        return file.getName().substring(index);
+        int index = file.getName().lastIndexOf('.');
+        if (index == -1) {
+            return "";
+        }
+
+        return file.getName().substring(index + 1);
     }
 }
