@@ -15,15 +15,14 @@ public class FileConverter {
         // TODO: Transform this method according of polymorphism: convert any-to-any (photo formats)
         File inputFile = new File(TEST_IMG_FOLDER_PATH + File.separator + "eifel.jpg");
         File outputFile = new File(TEST_IMG_FOLDER_PATH + File.separator + "Test.tiff");
-        try (InputStream is = new FileInputStream(inputFile)) {
+
+        try (InputStream is = new FileInputStream(inputFile);
+             OutputStream os = new FileOutputStream(outputFile)) {
+
             BufferedImage image = ImageIO.read(is);
-            try (OutputStream os = new FileOutputStream(outputFile)) {
-                ImageIO.write(image, "tiff", os);
-            } catch (Exception exp) {
-                exp.printStackTrace();
-            }
-        } catch (Exception exp) {
-            exp.printStackTrace();
+            ImageIO.write(image, "tiff", os);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
