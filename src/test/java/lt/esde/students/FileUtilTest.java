@@ -1,74 +1,65 @@
 package lt.esde.students;
 
-import java.io.File;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.io.File;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FileUtilTest {
-
-
-    @org.junit.jupiter.api.Test
+    @Test
     void convertToTiff() {
+
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getCreationDateTime() {
 
-
     }
 
-
-
-    @org.junit.jupiter.api.Test
+    @Test
     void getFileExtensionTxt() {
-        File testTxtFile= new File("Example.txt");
-        assertEquals(".txt",FileUtil.getFileExtension(testTxtFile));
+        File testTxtFile = new File("Example.txt");
+        assertEquals(".txt", FileUtil.getFileExtension(testTxtFile));
 
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getFileExtensionExe() {
-        File testExeFile= new File("ExeFile.exe");
+        File testExeFile = new File("ExeFile.exe");
 
-        File testNullFile= null;
-        assertEquals(".exe",FileUtil.getFileExtension(testExeFile));
-
+        File testNullFile = null;
+        assertEquals(".exe", FileUtil.getFileExtension(testExeFile));
     }
-    @org.junit.jupiter.api.Test
+
+    @Test
     void getFileWithoutException() {
-        File testWithoutExceptionFile= new File("FileWithoutException");
+        File testWithoutExceptionFile = new File("FileWithoutException");
 
-        assertEquals("Incorrect File",FileUtil.getFileExtension(testWithoutExceptionFile));
+        assertEquals("Incorrect File", FileUtil.getFileExtension(testWithoutExceptionFile));
+    }
 
-        };
-    @org.junit.jupiter.api.Test
-        void getFileExtensionWitchSpace() {
-            File testFileWitchSpace= new File("File witch space.txt");
+    @Test
+    void getFileExtensionWitchSpace() {
+        File testFileWitchSpace = new File("File witch space.txt");
 
-            assertEquals(".txt",FileUtil.getFileExtension(testFileWitchSpace));
+        assertEquals(".txt", FileUtil.getFileExtension(testFileWitchSpace));
+    }
 
+    @Test
+    void getFileExtensionWitchDoublePoint() {
+        File testFileWitchDoublePoint = new File("FileWitchDoublePoint..txt");
 
-        }
-    @org.junit.jupiter.api.Test
-        void getFileExtensionWitchDoublePoint() {
-            File testFileWitchDoublePoint= new File("FileWitchDoublePoint..txt");
+        assertEquals(".txt", FileUtil.getFileExtension(testFileWitchDoublePoint));
+    }
 
-            assertEquals(".txt",FileUtil.getFileExtension(testFileWitchDoublePoint));
-
-
-        }
-
-    @org.junit.jupiter.api.Test
+    @Test
     void getFileExtensionWitchNull() {
-        File nullFile= null;
+        File nullFile = null;
 
         assertThrows(NullPointerException.class, () -> {
             FileUtil.getFileExtension(nullFile);
         });
-
-
     }
-
-    }
+}
