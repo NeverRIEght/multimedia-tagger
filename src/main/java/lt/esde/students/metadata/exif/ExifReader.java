@@ -52,7 +52,7 @@ public class ExifReader {
 
     /**
      * Parses the whole set of EXIF tags for specific file and returns it as a <code>Hashmap</code>
-     * <p>
+     * <p>Uses two libraries for the same file. For the most of EXIF fields, duplicates will be deleted.
      *
      * @param fromFile file to parse
      * @return <code>Hashmap</code> of the non-null fields set. Might be null if the set is empty
