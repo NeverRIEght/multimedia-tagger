@@ -36,15 +36,19 @@ public class ExifWriter {
      * @see ExifTagConstants
      */
     public static boolean writeExifTagDateTimeOriginal(final File inputImage,
-                                                       final String outputImage,
+                                                       final File outputImage,
                                                        final LocalDateTime dateTimeToWrite) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String dateTimeString = dateTimeToWrite.format(formatter);
-
-        if (Objects.isNull(inputImage) || !inputImage.isFile()) {
+        if (!inputImage.isFile()) {
             throw new NullPointerException("inputImage is null or not a File");
-        } else if (Objects.isNull(outputImage)) {
+        }
+        if (Objects.isNull(outputImage)) {
             throw new NullPointerException("outputImage is null");
+        }
+        if (outputImage.isFile()) {
+            throw new RuntimeException("outputImage must not exist");
+        }
+        if (inputImage.getAbsolutePath().equals(outputImage.getAbsolutePath())) {
+            throw new RuntimeException("outputImage can not be inputImage");
         }
 
         try (FileOutputStream fos = new FileOutputStream(outputImage);
@@ -71,6 +75,9 @@ public class ExifWriter {
                 outputSet.removeField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
             }
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String dateTimeString = dateTimeToWrite.format(formatter);
+
             TiffOutputField outputField = new TiffOutputField(
                     ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL,
                     FieldType.ASCII,
@@ -82,9 +89,26 @@ public class ExifWriter {
             exifDirectory.add(outputField);
             new ExifRewriter().updateExifMetadataLossless(inputImage, os, outputSet);
 
-            return (null != readExifTag(new File(outputImage), ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL));
+            return (null != readExifTag(outputImage, ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL));
         } catch (ImageWriteException | ImageReadException | IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static boolean writeExifTagDateTimeOriginal(final String inputImagePath,
+                                                       final String outputImagePath,
+                                                       final LocalDateTime dateTimeToWrite) {
+
+        File inputImage = new File(inputImagePath);
+        File outputImage = new File(outputImagePath);
+
+        if (!inputImage.isFile()) {
+            throw new NullPointerException("inputImage does not exist");
+        }
+        if (outputImage.isFile()) {
+            throw new RuntimeException("outputImage must not exist");
+        }
+
+        return writeExifTagDateTimeOriginal(inputImage, outputImage, dateTimeToWrite);
     }
 }

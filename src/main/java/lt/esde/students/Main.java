@@ -2,9 +2,6 @@ package lt.esde.students;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.HashMap;
-
-import static lt.esde.students.metadata.exif.ExifReader.readExifTags;
 
 public class Main {
     /**
@@ -27,7 +24,11 @@ public class Main {
 
     public static void main(String[] args) {
 
-        HashMap<String, String> map = readExifTags(new File(TEST_IMG_WITH_METADATA_PATH));
+//        HashMap<String, String> map = readExifTags(new File(TEST_IMG_WITH_METADATA_PATH));
+//
+//        for (int i = 0; i < map.size(); i++) {
+//            System.out.println(map.keySet().toArray()[i] + " - " + map.get(map.keySet().toArray()[i]));
+//        }
 
 //        for (Map.Entry<String, String> item : map.entrySet()) {
 //            String itemValueStr = item.getValue();
@@ -44,9 +45,6 @@ public class Main {
 //            }
 //        }
 
-        for (int i = 0; i < map.size(); i++) {
-            System.out.println(map.keySet().toArray()[i] + " - " + map.get(map.keySet().toArray()[i]));
-        }
 
     }
 }
