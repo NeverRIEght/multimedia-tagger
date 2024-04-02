@@ -1,6 +1,6 @@
 package lt.esde.students;
 
-import lt.esde.students.metadata.exif.ExifWriter;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +8,9 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static lt.esde.students.Main.TEST_IMG_FOLDER_PATH;
+import static lt.esde.students.Main.TEST_IMG_WITH_METADATA_PATH;
+import static lt.esde.students.metadata.exif.ExifWriter.writeExifTagDateTimeOriginal;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -22,29 +25,58 @@ class ExifUtilTest {
         exampleDateTime = LocalDateTime.parse("2010-01-01 10:01:10", formatter);
     }
 
+    @AfterAll
+    static void removeImages() {
+        File imageWithExif = new File("image_with_exif.jpg");
+        if (imageWithExif.isFile()) {
+            assertTrue(imageWithExif.delete());
+        }
+    }
+
     @Test
     void writeExifTagDateTimeOriginalFileNotFound() {
-        File inputImage = new File("non_existent_image.jpg");
+        String inputImage = "non_existent_image.jpg";
         String outputImage = "output/image_with_exif.jpg";
         assertThrows(NullPointerException.class, () -> {
-            ExifWriter.writeExifTagDateTimeOriginal(inputImage, outputImage, exampleDateTime);
+            writeExifTagDateTimeOriginal(inputImage, outputImage, exampleDateTime);
         });
     }
 
     @Test
-    void writeExifTagDateTimeOriginalFile() throws Exception {
-        File inputFile = new File("testimg/eifel.jpg");
+    void writeExifTagDateTimeOriginalFile() {
+        String inputImage = "testimg/eifel.jpg";
         String outputImage = "image_with_exif.jpg";
-        boolean result = ExifWriter.writeExifTagDateTimeOriginal(inputFile, outputImage, exampleDateTime);
+        boolean result = writeExifTagDateTimeOriginal(inputImage, outputImage, exampleDateTime);
         assertTrue(true);
     }
 
     @Test
-    void writeExifTagDateTimeOriginalFileIncorrectData() throws Exception {
-        File inputFile = new File("exif.tsss");
+    void writeExifTagDateTimeOriginalFileIncorrectData() {
+        String inputImage = "exif.tsss";
         String outputImage = "image_with_exif.jpg";
-        boolean result = ExifWriter.writeExifTagDateTimeOriginal(inputFile, outputImage, exampleDateTime);
-        assertTrue(true);
+        assertThrows(NullPointerException.class, () -> {
+            writeExifTagDateTimeOriginal(inputImage, outputImage, exampleDateTime);
+        });
+    }
+
+    @Test
+    void writeExifTagDateTimeOriginalSameFileTest() {
+        boolean resultOtherPath = writeExifTagDateTimeOriginal(TEST_IMG_WITH_METADATA_PATH,
+                TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg",
+                exampleDateTime);
+        assertTrue(resultOtherPath);
+
+        assertThrows(RuntimeException.class, () -> {
+            writeExifTagDateTimeOriginal(
+                    TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg",
+                    TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg",
+                    exampleDateTime);
+        });
+
+        File imageFile = new File(TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg");
+        if (imageFile.isFile()) {
+            assertTrue(imageFile.delete());
+        }
     }
 
     @Test
