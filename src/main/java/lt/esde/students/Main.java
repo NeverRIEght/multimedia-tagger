@@ -1,14 +1,10 @@
 package lt.esde.students;
 
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
-
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.HashMap;
+
+import static lt.esde.students.metadata.exif.ExifReader.readExifTags;
 
 public class Main {
     /**
@@ -29,17 +25,27 @@ public class Main {
     public static final String TEST_IMG_WITHOUT_METADATA_PATH = Paths.get("")
             .toAbsolutePath() + File.separator + "testimg" + File.separator + "maricat.jpg";
 
-    public static void main(String[] args) throws Exception {
-        Metadata metadata = ImageMetadataReader.readMetadata(new File(TEST_IMG_WITH_METADATA_PATH));
+    public static void main(String[] args) {
 
-        Iterable<Directory> directories = metadata.getDirectories();
-        Iterator<Directory> iterator = directories.iterator();
-        while (iterator.hasNext()) {
-            Directory dir = iterator.next();
-            Collection<Tag> tags = dir.getTags();
-            for (Tag tag : tags) {
-                System.out.println(tag.getTagName() + " - " + tag.getDescription() + " - " + tag.getTagTypeHex());
-            }
+        HashMap<String, String> map = readExifTags(new File(TEST_IMG_WITH_METADATA_PATH));
+
+//        for (Map.Entry<String, String> item : map.entrySet()) {
+//            String itemValueStr = item.getValue();
+//            String itemKeyStr = item.getKey();
+//
+//            Pattern dateValuePattern = Pattern.compile("[0-9]{2}\\u003A[0-9]{2}\\u003A[0-9]{2}");
+//            Matcher dateValueMatcher = dateValuePattern.matcher(itemValueStr);
+//            Pattern dateKeyPattern = Pattern.compile("date|Date");
+//            Matcher dateKeyMatcher = dateKeyPattern.matcher(itemKeyStr);
+//
+//            if (dateValueMatcher.find() || dateKeyMatcher.find()) {
+//                System.out.print(itemKeyStr + ":");
+//                System.out.println(itemValueStr.replaceAll(", ", "\n"));
+//            }
+//        }
+
+        for (int i = 0; i < map.size(); i++) {
+            System.out.println(map.keySet().toArray()[i] + " - " + map.get(map.keySet().toArray()[i]));
         }
 
     }
