@@ -2,6 +2,10 @@ package lt.esde.students;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static lt.esde.students.metadata.exif.ExifReader.getAllMetadataDates;
 
 public class Main {
     /**
@@ -24,27 +28,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        HashMap<String, String> map = readExifTags(new File(TEST_IMG_WITH_METADATA_PATH));
-//
-//        for (int i = 0; i < map.size(); i++) {
-//            System.out.println(map.keySet().toArray()[i] + " - " + map.get(map.keySet().toArray()[i]));
-//        }
+        List<LocalDateTime> dates = getAllMetadataDates(new File(TEST_IMG_WITH_METADATA_PATH));
 
-//        for (Map.Entry<String, String> item : map.entrySet()) {
-//            String itemValueStr = item.getValue();
-//            String itemKeyStr = item.getKey();
-//
-//            Pattern dateValuePattern = Pattern.compile("[0-9]{2}\\u003A[0-9]{2}\\u003A[0-9]{2}");
-//            Matcher dateValueMatcher = dateValuePattern.matcher(itemValueStr);
-//            Pattern dateKeyPattern = Pattern.compile("date|Date");
-//            Matcher dateKeyMatcher = dateKeyPattern.matcher(itemKeyStr);
-//
-//            if (dateValueMatcher.find() || dateKeyMatcher.find()) {
-//                System.out.print(itemKeyStr + ":");
-//                System.out.println(itemValueStr.replaceAll(", ", "\n"));
-//            }
-//        }
-
-
+        System.out.println(dates);
     }
 }

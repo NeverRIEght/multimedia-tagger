@@ -15,10 +15,11 @@ import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static lt.esde.students.Main.TEST_IMG_WITH_METADATA_PATH;
 
@@ -79,12 +80,12 @@ public class ExifReader {
                 for (Tag tag : tags) {
                     boolean isInMap = false;
                     for (Map.Entry<String, String> entry : tagsMap.entrySet()) {
-                        if(entry.getValue().equals(tag.getDescription())) {
+                        if (entry.getValue().equals(tag.getDescription())) {
                             isInMap = true;
                         }
                     }
 
-                    if(!isInMap) {
+                    if (!isInMap) {
                         tagsMap.put(tag.getTagName(), tag.getDescription());
                     }
                 }
@@ -95,5 +96,73 @@ public class ExifReader {
         }
 
         return tagsMap;
+    }
+
+    public static List<LocalDateTime> getAllMetadataDates(File fromFile) {
+        Locale.setDefault(Locale.ENGLISH);
+
+        HashMap<String, String> map = readExifTags(fromFile);
+        List<String> dateStrings = new ArrayList<>();
+
+        for (Map.Entry<String, String> item : map.entrySet()) {
+            String itemValueStr = item.getValue();
+            String itemKeyStr = item.getKey();
+
+            Pattern dateValuePattern = Pattern.compile("[0-9]{2}\\u003A[0-9]{2}\\u003A[0-9]{2}");
+            Matcher dateValueMatcher = dateValuePattern.matcher(itemValueStr);
+            Pattern dateKeyPattern = Pattern.compile("date|Date");
+            Matcher dateKeyMatcher = dateKeyPattern.matcher(itemKeyStr);
+
+            if (dateValueMatcher.find() || dateKeyMatcher.find()) {
+                dateStrings.add(itemValueStr);
+            }
+        }
+
+        System.out.println(dateStrings.toString().replace(", ", "\n"));
+
+
+        List<LocalDateTime> dates = new ArrayList<>();
+
+        Pattern timePattern = Pattern.compile("[0-9]{2}\\u003A[0-9]{2}\\u003A[0-9]{2}");
+        String datePatternString1 = "([0-9]{4}\\u003A[0-9]{2}\\u003A[0-9]{2})";
+        String datePatternString2 = "([0-9]{4}\\u002D[0-9]{2}\\u002D[0-9]{2})";
+        Pattern datePattern = Pattern.compile(datePatternString1 + "|" + datePatternString2);
+
+        for (int i = 0; i < dateStrings.size(); i++) {
+            String currentString = dateStrings.get(i);
+
+            Matcher dateMatcher = datePattern.matcher(currentString);
+            String dateString = "";
+            if (dateMatcher.find()) {
+                int startIndex = dateMatcher.start();
+                int endIndex = dateMatcher.end();
+                dateString = currentString.substring(startIndex, endIndex);
+                dateString = dateString.replaceAll(":", "-");
+                currentString = currentString.substring(endIndex);
+            }
+
+            Matcher timeMatcher = timePattern.matcher(currentString);
+            String timeString = "";
+            if (timeMatcher.find()) {
+                int startIndex = timeMatcher.start();
+                int endIndex = timeMatcher.end();
+                timeString = currentString.substring(startIndex, endIndex);
+            }
+
+            if (!timeString.isEmpty() && !dateString.isEmpty()) {
+                LocalDateTime dateTime = LocalDateTime.parse(dateString + "T" + timeString);
+                dates.add(dateTime);
+                continue;
+            }
+
+            //if() Fri Mar 29 20:35:59 +02:00 2024 parse
+            if (dateString.isEmpty()) {
+
+            }
+        }
+
+        dates = dates.stream().distinct().collect(Collectors.toList());
+
+        return dates;
     }
 }
