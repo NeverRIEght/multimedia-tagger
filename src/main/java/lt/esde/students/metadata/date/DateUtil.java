@@ -12,6 +12,7 @@ import static lt.esde.students.metadata.exif.ExifReader.readExifTags;
 public class DateUtil {
     /**
      * Method parses the metadata from the <code>File</code> and returns a <code>List</code> of dates inside of it.
+     * <p> Can return an empty list
      * <p>
      *
      * @param fromFile <code>File</code> to parse metadata from
@@ -123,14 +124,14 @@ public class DateUtil {
     }
 
     public static LocalDateTime getOldestDate(List<LocalDateTime> dates) {
-        if (dates == null) {
+        if (Objects.isNull(dates)) {
             throw new NullPointerException("dates is null");
+        }
+        if (dates.isEmpty()) {
+            throw new RuntimeException("dates is empty");
         }
 
         LocalDateTime oldestDate = dates.getFirst();
-        if (dates.size() == 1) {
-            return oldestDate;
-        }
 
         for (int i = 1; i < dates.size() - 1; i++) {
             LocalDateTime currentDate = dates.get(i);
