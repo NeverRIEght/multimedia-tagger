@@ -79,12 +79,12 @@ public class ExifReader {
                 for (Tag tag : tags) {
                     boolean isInMap = false;
                     for (Map.Entry<String, String> entry : tagsMap.entrySet()) {
-                        if(entry.getValue().equals(tag.getDescription())) {
+                        if (entry.getValue().equals(tag.getDescription())) {
                             isInMap = true;
                         }
                     }
 
-                    if(!isInMap) {
+                    if (!isInMap) {
                         tagsMap.put(tag.getTagName(), tag.getDescription());
                     }
                 }
