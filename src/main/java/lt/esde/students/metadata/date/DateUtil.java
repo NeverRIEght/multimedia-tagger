@@ -116,4 +116,24 @@ public class DateUtil {
 
         return dates;
     }
+
+    public static LocalDateTime getOldestDate(List<LocalDateTime> dates) {
+        if (dates == null) {
+            throw new NullPointerException("dates is null");
+        }
+
+        LocalDateTime oldestDate = dates.getFirst();
+        if (dates.size() == 1) {
+            return oldestDate;
+        }
+
+        for (int i = 1; i < dates.size() - 1; i++) {
+            LocalDateTime currentDate = dates.get(i);
+            if (oldestDate.isAfter(currentDate)) {
+                oldestDate = currentDate;
+            }
+        }
+
+        return oldestDate;
+    }
 }
