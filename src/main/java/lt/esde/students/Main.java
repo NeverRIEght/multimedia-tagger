@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static lt.esde.students.metadata.exif.ExifReader.getAllMetadataDates;
+import static lt.esde.students.metadata.date.DateUtil.getAllMetadataDates;
 
 public class Main {
     /**
