@@ -149,15 +149,54 @@ public class ExifReader {
                 timeString = currentString.substring(startIndex, endIndex);
             }
 
+            //if() Fri Mar 29 20:35:59 +02:00 2024 parse
+            if (dateString.isEmpty()) {
+                Pattern monthDayPattern = Pattern.compile(
+                        "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\s[0-9]{2}"
+                );
+                Pattern yearPattern = Pattern.compile("\\u003A[0-9]{2}\\s[0-9]{4}");
+
+                Matcher monthDayMatcher = monthDayPattern.matcher(currentString);
+                String monthString = "";
+                String dayString = "";
+                if (monthDayMatcher.find()) {
+                    int startIndex = monthDayMatcher.start();
+                    int endIndex = monthDayMatcher.end();
+                    monthString = currentString.substring(startIndex, endIndex - 3);
+                    dayString = currentString.substring(startIndex + 4, endIndex);
+                }
+
+                Matcher yearMatcher = yearPattern.matcher(currentString);
+                String yearString = "";
+                if (yearMatcher.find()) {
+                    int startIndex = yearMatcher.start();
+                    int endIndex = yearMatcher.end();
+                    yearString = currentString.substring(startIndex + 4, endIndex);
+                }
+
+                if (!monthString.isEmpty() && !dayString.isEmpty() && !yearString.isEmpty()) {
+                    switch (monthString) {
+                        case "Jan" -> monthString = "01";
+                        case "Feb" -> monthString = "02";
+                        case "Mar" -> monthString = "03";
+                        case "Apr" -> monthString = "04";
+                        case "May" -> monthString = "05";
+                        case "Jun" -> monthString = "06";
+                        case "Jul" -> monthString = "07";
+                        case "Aug" -> monthString = "08";
+                        case "Sep" -> monthString = "09";
+                        case "Oct" -> monthString = "10";
+                        case "Nov" -> monthString = "11";
+                        case "Dec" -> monthString = "12";
+                    }
+
+                    dateString = yearString + "-" + monthString + "-" + dayString;
+                }
+            }
+
             if (!timeString.isEmpty() && !dateString.isEmpty()) {
                 LocalDateTime dateTime = LocalDateTime.parse(dateString + "T" + timeString);
                 dates.add(dateTime);
-                continue;
-            }
-
-            //if() Fri Mar 29 20:35:59 +02:00 2024 parse
-            if (dateString.isEmpty()) {
-
             }
         }
 
