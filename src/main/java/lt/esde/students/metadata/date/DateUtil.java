@@ -123,6 +123,13 @@ public class DateUtil {
         return outputDates;
     }
 
+    /**
+     * Method finds and returns the oldest date from the <code>List</code> of dates
+     * <p>
+     *
+     * @param dates <code>List</code> of LocalDateTime, the list of dates to search in
+     * @return The oldest date from <code>dates</code>
+     */
     public static LocalDateTime getOldestDate(List<LocalDateTime> dates) {
         if (Objects.isNull(dates)) {
             throw new NullPointerException("dates is null");
