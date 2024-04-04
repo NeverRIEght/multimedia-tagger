@@ -10,6 +10,13 @@ import java.util.stream.Collectors;
 import static lt.esde.students.metadata.exif.ExifReader.readExifTags;
 
 public class DateUtil {
+    /**
+     * Method parses the metadata from the <code>File</code> and returns a <code>List</code> of dates inside of it.
+     * <p>
+     *
+     * @param fromFile <code>File</code> to parse metadata from
+     * @return <code>List</code> of LocalDateTime contains the dates from the file
+     */
     public static List<LocalDateTime> getAllMetadataDates(File fromFile) {
         if (!fromFile.isFile()) {
             throw new NullPointerException("File does not exist");
