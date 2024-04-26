@@ -2,10 +2,6 @@ package lt.esde.students;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static lt.esde.students.metadata.date.DateUtil.getAllMetadataDates;
 
 public class Main {
     /**
@@ -28,8 +24,5 @@ public class Main {
 
     public static void main(String[] args) {
 
-        List<LocalDateTime> dates = getAllMetadataDates(new File(TEST_IMG_WITH_METADATA_PATH));
-
-        System.out.println(dates);
     }
 }
