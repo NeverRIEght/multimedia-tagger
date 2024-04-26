@@ -6,7 +6,7 @@ public class MediaTaggerException extends Throwable{
         super(message);
     }
 
-    private static String getMessage(String message, MediaTaggerExceptionErrors error) {
+    protected static String generateMessage(String message, MediaTaggerExceptionErrors error) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(error.getError());

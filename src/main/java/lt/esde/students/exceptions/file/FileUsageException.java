@@ -5,19 +5,14 @@ import lt.esde.students.exceptions.MediaTaggerException;
 import java.io.File;
 
 public class FileUsageException extends MediaTaggerException {
+    private final File file;
+
     public FileUsageException(String message, File file, FileUsageExceptionErrors error) {
-        super(generateErrorMessage(message, file, error));
+        super(generateMessage(message, error));
+        this.file = file;
     }
 
-    private static String generateErrorMessage(String message, File file, FileUsageExceptionErrors error) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(error.getError());
-        sb.append(": ");
-        sb.append(message);
-        sb.append("in the file - ");
-        sb.append(file.getAbsolutePath());
-
-        return sb.toString();
+    public File getFile() {
+        return this.file;
     }
 }
