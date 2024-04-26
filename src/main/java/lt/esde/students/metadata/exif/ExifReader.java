@@ -97,16 +97,7 @@ public class ExifReader {
             for (Directory dir : directories) {
                 Collection<Tag> tags = dir.getTags();
                 for (Tag tag : tags) {
-                    boolean isInMap = false;
-                    for (Map.Entry<String, String> entry : extractorTagsMap.entrySet()) {
-                        if (entry.getValue().equals(tag.getDescription())) {
-                            isInMap = true;
-                        }
-                    }
-
-                    if (!isInMap) {
-                        extractorTagsMap.put(tag.getTagName(), tag.getDescription());
-                    }
+                    extractorTagsMap.put(tag.getTagName(), tag.getDescription());
                 }
             }
         } catch (ImageProcessingException | IOException e) {
