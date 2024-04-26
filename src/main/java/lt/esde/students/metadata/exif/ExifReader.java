@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static lt.esde.students.Main.TEST_IMG_WITH_METADATA_PATH;
-
 public class ExifReader {
     /**
      * Parses the specific EXIF tag to <code>String</code>
@@ -35,9 +33,7 @@ public class ExifReader {
     public static String readExifTag(final File fromFile, final TagInfo tagInfo) {
         try {
             final ImageMetadata metadata = Imaging.getMetadata(fromFile);
-            if (metadata instanceof JpegImageMetadata) {
-                final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
-
+            if (metadata instanceof JpegImageMetadata jpegMetadata) {
                 final TiffField field = jpegMetadata.findEXIFValueWithExactMatch(tagInfo);
                 if (field != null) {
                     return field.getValueDescription();
@@ -52,48 +48,71 @@ public class ExifReader {
 
     /**
      * Parses the whole set of EXIF tags for specific file and returns it as a <code>Hashmap</code>
-     * <p>Uses two libraries for the same file. For the most of EXIF fields, duplicates will be deleted.
+     * <p>Uses two libraries for the same file. Can produce duplicates.
      *
      * @param fromFile file to parse
      * @return <code>Hashmap</code> of the non-null fields set. Might be null if the set is empty
      */
-    public static HashMap<String, String> readExifTags(final File fromFile) {
-        HashMap<String, String> tagsMap = new HashMap<>();
+    public static Map<String, String> readExifTags(final File fromFile) {
+        HashMap<String, String> output = new HashMap<>();
+
+        HashMap<String, String> apacheTagsMap = readExifTagsApache(fromFile);
+        if (!apacheTagsMap.isEmpty()) {
+            output.putAll(apacheTagsMap);
+        }
+
+        HashMap<String, String> extractorTagsMap = readExifTagsMetadataExtractor(fromFile);
+        if (!extractorTagsMap.isEmpty()) {
+            output.putAll(extractorTagsMap);
+        }
+
+        return output;
+    }
+
+    private static HashMap<String, String> readExifTagsApache(File fromFile) {
+        HashMap<String, String> apacheTagsMap = new HashMap<>();
 
         try {
             final ImageMetadata apacheMetadata = Imaging.getMetadata(fromFile);
-            if (apacheMetadata instanceof JpegImageMetadata) {
-                final JpegImageMetadata jpegMetadata = (JpegImageMetadata) apacheMetadata;
+            if (apacheMetadata instanceof JpegImageMetadata jpegMetadata) {
                 final List<ImageMetadata.ImageMetadataItem> items = jpegMetadata.getItems();
-
                 for (final ImageMetadata.ImageMetadataItem item : items) {
                     String tagString = item.toString();
-                    tagsMap.put(tagString.substring(0, tagString.indexOf(":")), tagString.substring(tagString.indexOf(":") + 2));
+                    apacheTagsMap.put(tagString.substring(0, tagString.indexOf(":")), tagString.substring(tagString.indexOf(":") + 2));
                 }
             }
+        } catch (ImageReadException | IOException e) {
+            throw new RuntimeException(e);
+        }
 
-            Metadata extractorMetadata = ImageMetadataReader.readMetadata(new File(TEST_IMG_WITH_METADATA_PATH));
+        return apacheTagsMap;
+    }
+
+    private static HashMap<String, String> readExifTagsMetadataExtractor(File fromFile) {
+        HashMap<String, String> extractorTagsMap = new HashMap<>();
+
+        try {
+            Metadata extractorMetadata = ImageMetadataReader.readMetadata(fromFile);
             Iterable<Directory> directories = extractorMetadata.getDirectories();
             for (Directory dir : directories) {
                 Collection<Tag> tags = dir.getTags();
                 for (Tag tag : tags) {
                     boolean isInMap = false;
-                    for (Map.Entry<String, String> entry : tagsMap.entrySet()) {
+                    for (Map.Entry<String, String> entry : extractorTagsMap.entrySet()) {
                         if (entry.getValue().equals(tag.getDescription())) {
                             isInMap = true;
                         }
                     }
 
                     if (!isInMap) {
-                        tagsMap.put(tag.getTagName(), tag.getDescription());
+                        extractorTagsMap.put(tag.getTagName(), tag.getDescription());
                     }
                 }
             }
-
-        } catch (ImageReadException | IOException | ImageProcessingException e) {
+        } catch (ImageProcessingException | IOException e) {
             throw new RuntimeException(e);
         }
 
-        return tagsMap;
+        return extractorTagsMap;
     }
 }

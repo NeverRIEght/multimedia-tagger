@@ -25,7 +25,7 @@ public class DateUtil {
 
         Locale.setDefault(Locale.ENGLISH);
 
-        HashMap<String, String> map = readExifTags(fromFile);
+        Map<String, String> map = readExifTags(fromFile);
         List<String> dateStrings = new ArrayList<>();
 
         Pattern timePattern = Pattern.compile("[0-9]{2}\\u003A[0-9]{2}\\u003A[0-9]{2}");
