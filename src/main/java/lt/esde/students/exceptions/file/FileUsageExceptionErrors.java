@@ -1,6 +1,8 @@
 package lt.esde.students.exceptions.file;
 
-public enum FileUsageExceptionErrors {
+import lt.esde.students.exceptions.MediaTaggerExceptionErrors;
+
+public enum FileUsageExceptionErrors implements MediaTaggerExceptionErrors {
     READ_ERROR("Read error"),
     WRITE_ERROR("Write error"),;
 
@@ -9,6 +11,7 @@ public enum FileUsageExceptionErrors {
         this.error = error;
     }
 
+    @Override
     public String getError() {
         return this.error;
     }
