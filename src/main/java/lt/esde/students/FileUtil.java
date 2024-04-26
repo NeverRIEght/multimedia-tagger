@@ -6,14 +6,12 @@ import java.util.regex.Pattern;
 
 public class FileUtil {
     /**
-     * Returns extension of the provided file as a <code>String</code>
-     * <p>If there is no extension, method will return empty <code>String</code>
-     * <p>Examples of return: "exe", "txt", etc.
-     * <p>
+     * This method returns the extension of the provided file
      *
-     * @param file <code>File</code> to get extension of
-     * @return <code>File</code> extension as a <code>String</code>.
-     * @see File
+     * @param ofFile file to get extension from
+     * @throws NullPointerException if provided file is null or not a file
+     * @throws IllegalArgumentException if provided file has no extension
+     * @return Extension of the provided file in lowercase ("txt", "exe", etc.)
      */
     public static String getFileExtension(File ofFile) {
         if (!ofFile.isFile()) {
