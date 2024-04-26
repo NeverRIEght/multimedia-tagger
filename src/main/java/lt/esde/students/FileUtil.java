@@ -1,29 +1,30 @@
 package lt.esde.students;
 
 import java.io.File;
-import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FileUtil {
     /**
-     * Returns extension of the provided file as a <code>String</code>
-     * <p>If there is no extension, method will return empty <code>String</code>
-     * <p>Examples of return: "exe", "txt", etc.
-     * <p>
+     * This method returns the extension of the provided file
      *
-     * @param file <code>File</code> to get extension of
-     * @return <code>File</code> extension as a <code>String</code>.
-     * @see File
+     * @param ofFile file to get extension from
+     * @throws NullPointerException if provided file is null or not a file
+     * @throws IllegalArgumentException if provided file has no extension
+     * @return Extension of the provided file in lowercase ("txt", "exe", etc.)
      */
-    public static String getFileExtension(File file) {
-        if (Objects.isNull(file)) {
-            throw new NullPointerException("The file is null");
+    public static String getFileExtension(File ofFile) {
+        if (!ofFile.isFile()) {
+            throw new NullPointerException("Provided file is not a file");
         }
 
-        int index = file.getName().lastIndexOf('.');
-        if (index == -1) {
-            return "";
-        }
+        Pattern extensionPattern = Pattern.compile("\\.(\\w{1,4})$");
+        Matcher extensionmatcher = extensionPattern.matcher(ofFile.getName());
 
-        return file.getName().substring(index + 1);
+        if (extensionmatcher.find()) {
+            return extensionmatcher.group(1).toLowerCase();
+        } else {
+            throw new IllegalArgumentException("File \"" + ofFile.getName() + "\" has no extension");
+        }
     }
 }
