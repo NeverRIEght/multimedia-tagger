@@ -1,7 +1,8 @@
 package lt.esde.students;
 
 import java.io.File;
-import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FileUtil {
     /**
@@ -14,16 +15,18 @@ public class FileUtil {
      * @return <code>File</code> extension as a <code>String</code>.
      * @see File
      */
-    public static String getFileExtension(File file) {
-        if (Objects.isNull(file)) {
-            throw new NullPointerException("The file is null");
+    public static String getFileExtension(File ofFile) {
+        if (!ofFile.isFile()) {
+            throw new NullPointerException("Provided file is not a file");
         }
 
-        int index = file.getName().lastIndexOf('.');
-        if (index == -1) {
-            return "";
-        }
+        Pattern extensionPattern = Pattern.compile("\\.(\\w{1,4})$");
+        Matcher extensionmatcher = extensionPattern.matcher(ofFile.getName());
 
-        return file.getName().substring(index + 1);
+        if (extensionmatcher.find()) {
+            return extensionmatcher.group(1).toLowerCase();
+        } else {
+            throw new IllegalArgumentException("File \"" + ofFile.getName() + "\" has no extension");
+        }
     }
 }
