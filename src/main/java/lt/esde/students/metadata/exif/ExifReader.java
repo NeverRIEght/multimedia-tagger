@@ -56,12 +56,12 @@ public class ExifReader {
     public static Map<String, String> readExifTags(final File fromFile) {
         HashMap<String, String> output = new HashMap<>();
 
-        HashMap<String, String> apacheTagsMap = readExifTagsApache(fromFile);
+        Map<String, String> apacheTagsMap = readExifTagsApache(fromFile);
         if (!apacheTagsMap.isEmpty()) {
             output.putAll(apacheTagsMap);
         }
 
-        HashMap<String, String> extractorTagsMap = readExifTagsMetadataExtractor(fromFile);
+        Map<String, String> extractorTagsMap = readExifTagsMetadataExtractor(fromFile);
         if (!extractorTagsMap.isEmpty()) {
             output.putAll(extractorTagsMap);
         }
@@ -69,7 +69,7 @@ public class ExifReader {
         return output;
     }
 
-    private static HashMap<String, String> readExifTagsApache(File fromFile) {
+    private static Map<String, String> readExifTagsApache(File fromFile) {
         HashMap<String, String> apacheTagsMap = new HashMap<>();
 
         try {
@@ -88,7 +88,7 @@ public class ExifReader {
         return apacheTagsMap;
     }
 
-    private static HashMap<String, String> readExifTagsMetadataExtractor(File fromFile) {
+    private static Map<String, String> readExifTagsMetadataExtractor(File fromFile) {
         HashMap<String, String> extractorTagsMap = new HashMap<>();
 
         try {
