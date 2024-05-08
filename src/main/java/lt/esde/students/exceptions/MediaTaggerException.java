@@ -11,7 +11,8 @@ public class MediaTaggerException extends RuntimeException{
     @Override
     public String getMessage() {
         StringBuilder sb = new StringBuilder();
-        sb.append("MediaTaggerException: ");
+        sb.append(this.getClass().getSimpleName());
+        sb.append(": ");
         sb.append(this.message);
 
         return sb.toString();
