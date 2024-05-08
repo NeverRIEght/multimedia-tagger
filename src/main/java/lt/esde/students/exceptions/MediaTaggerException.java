@@ -12,7 +12,7 @@ public class MediaTaggerException extends RuntimeException{
 
     /**
      * Constructor
-     * @param message
+     * @param message Message for exception
      */
     public MediaTaggerException(String message) {
         this.message = message;
