@@ -7,8 +7,8 @@ import java.io.File;
 public class FileUsageException extends MediaTaggerException {
     private final File file;
 
-    public FileUsageException(String message, File file, FileUsageExceptionErrors error) {
-        super(generateMessage(message, error));
+    public FileUsageException(String message, File file) {
+        super(message);
         this.file = file;
     }
 
