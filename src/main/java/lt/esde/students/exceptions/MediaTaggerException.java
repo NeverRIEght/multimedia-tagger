@@ -1,17 +1,19 @@
 package lt.esde.students.exceptions;
 
-public class MediaTaggerException extends Throwable{
+public class MediaTaggerException extends RuntimeException{
+
+    private final String message;
 
     public MediaTaggerException(String message) {
-        super(message);
+        this.message = message;
     }
 
-    protected static String generateMessage(String message, MediaTaggerExceptionErrors error) {
+    @Override
+    public String getMessage() {
         StringBuilder sb = new StringBuilder();
+        sb.append("MediaTaggerException: ");
+        sb.append(this.message);
 
-        sb.append(error.getError());
-        sb.append(": ");
-        sb.append(message);
         return sb.toString();
     }
 }

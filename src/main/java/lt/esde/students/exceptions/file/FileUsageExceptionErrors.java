@@ -1,7 +1,5 @@
 package lt.esde.students.exceptions.file;
 
-import lt.esde.students.exceptions.MediaTaggerExceptionErrors;
-
 public enum FileUsageExceptionErrors implements MediaTaggerExceptionErrors {
     READ_ERROR("Read error"),
     WRITE_ERROR("Write error"),;
