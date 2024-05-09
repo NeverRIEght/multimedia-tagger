@@ -62,7 +62,7 @@ class ExifUtilTest {
     @Test
     void writeExifTagDateTimeOriginalSameFileTest() {
         boolean resultOtherPath = writeExifTagDateTimeOriginal(TEST_IMG_WITH_METADATA_PATH,
-                TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg",
+                new File(TEST_IMG_FOLDER_PATH + File.separator + "test1.jpg"),
                 exampleDateTime);
         assertTrue(resultOtherPath);
 
