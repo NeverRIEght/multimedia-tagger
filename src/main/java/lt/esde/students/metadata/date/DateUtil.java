@@ -31,19 +31,13 @@ public class DateUtil {
         Pattern timePattern = Pattern.compile("\\d{2}\\u003A\\d{2}\\u003A\\d{2}");
         Pattern dateKeyPattern = Pattern.compile("date|Date");
 
-        String datePatternString1 = "(\\d{4}\\u003A\\d{2}\\u003A\\d{2})";
-        String datePatternString2 = "(\\d{4}\\u002D\\d{2}\\u002D\\d{2})";
-        Pattern datePattern = Pattern.compile(datePatternString1 + "|" + datePatternString2);
+        Pattern datePattern = Pattern.compile("(\\d{4}\\u003A\\d{2}\\u003A\\d{2})");
 
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            String value = entry.getValue();
-            String key = entry.getKey();
+            Matcher dateKeyMatcher = dateKeyPattern.matcher(entry.getKey());
 
-            Matcher dateValueMatcher = timePattern.matcher(value);
-            Matcher dateKeyMatcher = dateKeyPattern.matcher(key);
-
-            if (dateValueMatcher.find() || dateKeyMatcher.find()) {
-                dateStrings.add(value.replace("'", ""));
+            if (dateKeyMatcher.find()) {
+                dateStrings.add(entry.getValue().replace("'", ""));
             }
         }
 
