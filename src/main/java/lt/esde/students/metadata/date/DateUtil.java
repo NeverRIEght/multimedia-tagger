@@ -26,7 +26,7 @@ public class DateUtil {
         Locale.setDefault(Locale.ENGLISH);
 
         Map<String, String> map = readExifTags(fromFile);
-        List<String> dateStrings = new ArrayList<>();
+        Set<String> dateStrings = new HashSet<>();
 
         Pattern timePattern = Pattern.compile("\\d{2}\\u003A\\d{2}\\u003A\\d{2}");
         Pattern dateKeyPattern = Pattern.compile("date|Date");
@@ -43,7 +43,7 @@ public class DateUtil {
             Matcher dateKeyMatcher = dateKeyPattern.matcher(key);
 
             if (dateValueMatcher.find() || dateKeyMatcher.find()) {
-                dateStrings.add(value);
+                dateStrings.add(value.replace("'", ""));
             }
         }
 
@@ -52,6 +52,7 @@ public class DateUtil {
         for (String currentDateString : dateStrings) {
             Matcher dateMatcher = datePattern.matcher(currentDateString);
             String dateString = "";
+
             if (dateMatcher.find()) {
                 int startIndex = dateMatcher.start();
                 int endIndex = dateMatcher.end();
