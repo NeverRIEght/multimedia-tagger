@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import static lt.esde.students.metadata.exif.ExifReader.readExifTags;
 
 public class DateUtil {
+    private static final String UNICODE_COLON = "\\u003A";
+
     /**
      * Method parses the metadata from the <code>File</code> and returns a <code>List</code> of dates inside of it.
      * <p> Can return an empty list
@@ -28,10 +30,9 @@ public class DateUtil {
         Map<String, String> map = readExifTags(fromFile);
         Set<String> dateStrings = new HashSet<>();
 
-        Pattern timePattern = Pattern.compile("\\d{2}\\u003A\\d{2}\\u003A\\d{2}");
         Pattern dateKeyPattern = Pattern.compile("date|Date");
-
-        Pattern datePattern = Pattern.compile("(\\d{4}\\u003A\\d{2}\\u003A\\d{2})");
+        Pattern datePattern = Pattern.compile("(\\d{4}" + UNICODE_COLON + "\\d{2}" + UNICODE_COLON + "\\d{2})");
+        Pattern timePattern = Pattern.compile("\\d{2}" + UNICODE_COLON + "\\d{2}" + UNICODE_COLON + "\\d{2}");
 
         for (Map.Entry<String, String> entry : map.entrySet()) {
             Matcher dateKeyMatcher = dateKeyPattern.matcher(entry.getKey());
