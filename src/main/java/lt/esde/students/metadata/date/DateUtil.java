@@ -65,17 +65,17 @@ public class DateUtil {
                 dateString = dateMatcher.group(1).replace(":", "-");
             }
 
-            if (!dateString.isEmpty()) continue;
+            if (dateString.isEmpty()) {
+                dateMatcher = advancedDatePattern.matcher(currentDateString);
+                if (dateMatcher.find()) {
+                    String dayString = dateMatcher.group(2);
+                    String monthString = dateMatcher.group(1);
+                    String yearString = dateMatcher.group(3);
 
-            dateMatcher = advancedDatePattern.matcher(currentDateString);
-            if (dateMatcher.find()) {
-                String dayString = dateMatcher.group(2);
-                String monthString = dateMatcher.group(1);
-                String yearString = dateMatcher.group(3);
+                    monthString = Month.getNumericValue(monthString);
 
-                monthString = Month.getNumericValue(monthString);
-
-                dateString = String.format("%s-%s-%s", yearString, monthString, dayString);
+                    dateString = String.format("%s-%s-%s", yearString, monthString, dayString);
+                }
             }
 
             String timeString = "";
@@ -85,7 +85,11 @@ public class DateUtil {
                 timeString = timeMatcher.group(1);
             }
 
-            if (!timeString.isEmpty() && !dateString.isEmpty()) {
+            if (timeString.isEmpty()) {
+                timeString = "00:00:00";
+            }
+
+            if (!dateString.isEmpty()) {
                 LocalDateTime dateTime = LocalDateTime.parse(dateString + "T" + timeString);
                 outputDates.add(dateTime);
             }
