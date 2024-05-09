@@ -11,7 +11,22 @@ import static lt.esde.students.metadata.exif.ExifReader.readExifTags;
 
 public class DateUtil {
     private static final String UNICODE_COLON = "\\u003A";
+    private static final Pattern DATE_KEY_PATTERN = Pattern.compile("date|Date");
+    private static final Pattern DATE_PATTERN = Pattern.compile("(\\d{4}" +
+            UNICODE_COLON +
+            "\\d{2}" +
+            UNICODE_COLON +
+            "\\d{2})");
 
+    private static final Pattern ADVANCED_DATE_PATTERN = Pattern.compile(
+            "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)" +
+                    "\\s(\\d{2}).+(\\d{4})");
+
+    private static final Pattern TIME_PATTERN = Pattern.compile("\\D+(\\d{2}" +
+            UNICODE_COLON +
+            "\\d{2}" +
+            UNICODE_COLON +
+            "\\d{2})");
     /**
      * Method parses the metadata from the <code>File</code> and returns a <code>List</code> of dates inside of it.
      * <p> Can return an empty list
@@ -27,46 +42,21 @@ public class DateUtil {
 
         Locale.setDefault(Locale.ENGLISH);
 
-        Map<String, String> map = readExifTags(fromFile);
-        Set<String> dateStrings = new HashSet<>();
-
-        Pattern dateKeyPattern = Pattern.compile("date|Date");
-        Pattern datePattern = Pattern.compile("(\\d{4}" +
-                UNICODE_COLON +
-                "\\d{2}" +
-                UNICODE_COLON +
-                "\\d{2})");
-
-        Pattern advancedDatePattern = Pattern.compile(
-                "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)" +
-                        "\\s(\\d{2}).+(\\d{4})");
-
-        Pattern timePattern = Pattern.compile("\\D+(\\d{2}" +
-                UNICODE_COLON +
-                "\\d{2}" +
-                UNICODE_COLON +
-                "\\d{2})");
-
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            Matcher dateKeyMatcher = dateKeyPattern.matcher(entry.getKey());
-
-            if (dateKeyMatcher.find()) {
-                dateStrings.add(entry.getValue().replace("'", ""));
-            }
-        }
+        Map<String, String> tagsMap = readExifTags(fromFile);
+        Set<String> dateStrings = filterDateFields(tagsMap);
 
         List<LocalDateTime> outputDates = new ArrayList<>();
 
         for (String currentDateString : dateStrings) {
             String dateString = "";
 
-            Matcher dateMatcher = datePattern.matcher(currentDateString);
+            Matcher dateMatcher = DATE_PATTERN.matcher(currentDateString);
             if (dateMatcher.find()) {
                 dateString = dateMatcher.group(1).replace(":", "-");
             }
 
             if (dateString.isEmpty()) {
-                dateMatcher = advancedDatePattern.matcher(currentDateString);
+                dateMatcher = ADVANCED_DATE_PATTERN.matcher(currentDateString);
                 if (dateMatcher.find()) {
                     String dayString = dateMatcher.group(2);
                     String monthString = dateMatcher.group(1);
@@ -80,7 +70,7 @@ public class DateUtil {
 
             String timeString = "";
 
-            Matcher timeMatcher = timePattern.matcher(currentDateString);
+            Matcher timeMatcher = TIME_PATTERN.matcher(currentDateString);
             if (timeMatcher.find()) {
                 timeString = timeMatcher.group(1);
             }
@@ -98,6 +88,20 @@ public class DateUtil {
         outputDates = outputDates.stream().distinct().collect(Collectors.toList());
 
         return outputDates;
+    }
+
+    private static Set<String> filterDateFields(Map<String, String> tagsMap) {
+        Set<String> dateStrings = new HashSet<>();
+
+        for (Map.Entry<String, String> entry : tagsMap.entrySet()) {
+            Matcher dateKeyMatcher = DATE_KEY_PATTERN.matcher(entry.getKey());
+
+            if (dateKeyMatcher.find()) {
+                dateStrings.add(entry.getValue().replace("'", ""));
+            }
+        }
+
+        return dateStrings;
     }
 
     /**
