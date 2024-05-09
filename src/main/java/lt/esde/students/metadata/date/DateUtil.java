@@ -31,8 +31,21 @@ public class DateUtil {
         Set<String> dateStrings = new HashSet<>();
 
         Pattern dateKeyPattern = Pattern.compile("date|Date");
-        Pattern datePattern = Pattern.compile("(\\d{4}" + UNICODE_COLON + "\\d{2}" + UNICODE_COLON + "\\d{2})");
-        Pattern timePattern = Pattern.compile("\\d{2}" + UNICODE_COLON + "\\d{2}" + UNICODE_COLON + "\\d{2}");
+        Pattern datePattern = Pattern.compile("(\\d{4}" +
+                UNICODE_COLON +
+                "\\d{2}" +
+                UNICODE_COLON +
+                "\\d{2})");
+
+        Pattern advancedDatePattern = Pattern.compile(
+                "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)" +
+                        "\\s(\\d{2}).+(\\d{4})");
+
+        Pattern timePattern = Pattern.compile("\\D+(\\d{2}" +
+                UNICODE_COLON +
+                "\\d{2}" +
+                UNICODE_COLON +
+                "\\d{2})");
 
         for (Map.Entry<String, String> entry : map.entrySet()) {
             Matcher dateKeyMatcher = dateKeyPattern.matcher(entry.getKey());
@@ -45,67 +58,31 @@ public class DateUtil {
         List<LocalDateTime> outputDates = new ArrayList<>();
 
         for (String currentDateString : dateStrings) {
-            Matcher dateMatcher = datePattern.matcher(currentDateString);
             String dateString = "";
 
+            Matcher dateMatcher = datePattern.matcher(currentDateString);
             if (dateMatcher.find()) {
-                int startIndex = dateMatcher.start();
-                int endIndex = dateMatcher.end();
-                dateString = currentDateString.substring(startIndex, endIndex);
-                dateString = dateString.replace(":", "-");
-                currentDateString = currentDateString.substring(endIndex);
+                dateString = dateMatcher.group(1).replace(":", "-");
             }
 
-            if (dateString.isEmpty()) {
-                Pattern monthDayPattern = Pattern.compile(
-                        "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\s\\d{2}"
-                );
-                Pattern yearPattern = Pattern.compile("\\u003A\\d{2}\\s\\d{4}");
+            if (!dateString.isEmpty()) continue;
 
-                Matcher monthDayMatcher = monthDayPattern.matcher(currentDateString);
-                String monthString = "";
-                String dayString = "";
-                if (monthDayMatcher.find()) {
-                    int startIndex = monthDayMatcher.start();
-                    int endIndex = monthDayMatcher.end();
-                    monthString = currentDateString.substring(startIndex, endIndex - 3);
-                    dayString = currentDateString.substring(startIndex + 4, endIndex);
-                }
+            dateMatcher = advancedDatePattern.matcher(currentDateString);
+            if (dateMatcher.find()) {
+                String dayString = dateMatcher.group(2);
+                String monthString = dateMatcher.group(1);
+                String yearString = dateMatcher.group(3);
 
-                Matcher yearMatcher = yearPattern.matcher(currentDateString);
-                String yearString = "";
-                if (yearMatcher.find()) {
-                    int startIndex = yearMatcher.start();
-                    int endIndex = yearMatcher.end();
-                    yearString = currentDateString.substring(startIndex + 4, endIndex);
-                }
+                monthString = Month.getNumericValue(monthString);
 
-                if (!monthString.isEmpty() && !dayString.isEmpty() && !yearString.isEmpty()) {
-                    switch (monthString) {
-                        case "Jan" -> monthString = "01";
-                        case "Feb" -> monthString = "02";
-                        case "Mar" -> monthString = "03";
-                        case "Apr" -> monthString = "04";
-                        case "May" -> monthString = "05";
-                        case "Jun" -> monthString = "06";
-                        case "Jul" -> monthString = "07";
-                        case "Aug" -> monthString = "08";
-                        case "Sep" -> monthString = "09";
-                        case "Oct" -> monthString = "10";
-                        case "Nov" -> monthString = "11";
-                        case "Dec" -> monthString = "12";
-                    }
-
-                    dateString = yearString + "-" + monthString + "-" + dayString;
-                }
+                dateString = String.format("%s-%s-%s", yearString, monthString, dayString);
             }
+
+            String timeString = "";
 
             Matcher timeMatcher = timePattern.matcher(currentDateString);
-            String timeString = "";
             if (timeMatcher.find()) {
-                int startIndex = timeMatcher.start();
-                int endIndex = timeMatcher.end();
-                timeString = currentDateString.substring(startIndex, endIndex);
+                timeString = timeMatcher.group(1);
             }
 
             if (!timeString.isEmpty() && !dateString.isEmpty()) {
