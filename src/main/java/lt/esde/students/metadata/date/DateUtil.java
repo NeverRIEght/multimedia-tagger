@@ -28,11 +28,11 @@ public class DateUtil {
         Map<String, String> map = readExifTags(fromFile);
         List<String> dateStrings = new ArrayList<>();
 
-        Pattern timePattern = Pattern.compile("[0-9]{2}\\u003A[0-9]{2}\\u003A[0-9]{2}");
+        Pattern timePattern = Pattern.compile("\\d{2}\\u003A\\d{2}\\u003A\\d{2}");
         Pattern dateKeyPattern = Pattern.compile("date|Date");
 
-        String datePatternString1 = "([0-9]{4}\\u003A[0-9]{2}\\u003A[0-9]{2})";
-        String datePatternString2 = "([0-9]{4}\\u002D[0-9]{2}\\u002D[0-9]{2})";
+        String datePatternString1 = "(\\d{4}\\u003A\\d{2}\\u003A\\d{2})";
+        String datePatternString2 = "(\\d{4}\\u002D\\d{2}\\u002D\\d{2})";
         Pattern datePattern = Pattern.compile(datePatternString1 + "|" + datePatternString2);
 
         for (Map.Entry<String, String> item : map.entrySet()) {
@@ -64,7 +64,7 @@ public class DateUtil {
                 Pattern monthDayPattern = Pattern.compile(
                         "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\s[0-9]{2}"
                 );
-                Pattern yearPattern = Pattern.compile("\\u003A[0-9]{2}\\s[0-9]{4}");
+                Pattern yearPattern = Pattern.compile("\\u003A\\d{2}\\s\\d{4}");
 
                 Matcher monthDayMatcher = monthDayPattern.matcher(currentDateString);
                 String monthString = "";
