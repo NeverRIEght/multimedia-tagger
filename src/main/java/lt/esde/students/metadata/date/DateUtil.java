@@ -35,15 +35,15 @@ public class DateUtil {
         String datePatternString2 = "(\\d{4}\\u002D\\d{2}\\u002D\\d{2})";
         Pattern datePattern = Pattern.compile(datePatternString1 + "|" + datePatternString2);
 
-        for (Map.Entry<String, String> item : map.entrySet()) {
-            String itemValueStr = item.getValue();
-            String itemKeyStr = item.getKey();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String value = entry.getValue();
+            String key = entry.getKey();
 
-            Matcher dateValueMatcher = timePattern.matcher(itemValueStr);
-            Matcher dateKeyMatcher = dateKeyPattern.matcher(itemKeyStr);
+            Matcher dateValueMatcher = timePattern.matcher(value);
+            Matcher dateKeyMatcher = dateKeyPattern.matcher(key);
 
             if (dateValueMatcher.find() || dateKeyMatcher.find()) {
-                dateStrings.add(itemValueStr);
+                dateStrings.add(value);
             }
         }
 
@@ -56,13 +56,13 @@ public class DateUtil {
                 int startIndex = dateMatcher.start();
                 int endIndex = dateMatcher.end();
                 dateString = currentDateString.substring(startIndex, endIndex);
-                dateString = dateString.replaceAll(":", "-");
+                dateString = dateString.replace(":", "-");
                 currentDateString = currentDateString.substring(endIndex);
             }
 
             if (dateString.isEmpty()) {
                 Pattern monthDayPattern = Pattern.compile(
-                        "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\s[0-9]{2}"
+                        "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\s\\d{2}"
                 );
                 Pattern yearPattern = Pattern.compile("\\u003A\\d{2}\\s\\d{4}");
 
