@@ -41,10 +41,8 @@ public class JsonSerializer {
             throw new IllegalArgumentException("File is not a json file");
         }
 
-        try {
-            FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
+        try (FileWriter fileWriter = new FileWriter(file.getAbsolutePath())){
             fileWriter.write(json.toString(1));
-            fileWriter.close();
         } catch (IOException e) {
             throw new RuntimeException("Can not save json as file");
         }
