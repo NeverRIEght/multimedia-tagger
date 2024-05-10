@@ -14,7 +14,7 @@ public class ExifTag {
         this.writable = writable.trim();
         this.group = group.trim();
 
-        if (valuesNotes.trim().isEmpty()) {
+        if (valuesNotes.replace("\u00a0","").trim().isEmpty()) {
             this.valuesNotes = "";
         } else {
             String[] valuesNotesSplit = valuesNotes.split("\n");
