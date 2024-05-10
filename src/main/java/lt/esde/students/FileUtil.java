@@ -18,14 +18,7 @@ public class FileUtil {
             throw new NullPointerException("Provided file is not a file");
         }
 
-        Pattern extensionPattern = Pattern.compile("\\.(\\w{1,4})$");
-        Matcher extensionmatcher = extensionPattern.matcher(ofFile.getName());
-
-        if (extensionmatcher.find()) {
-            return extensionmatcher.group(1).toLowerCase();
-        } else {
-            throw new IllegalArgumentException("File \"" + ofFile.getName() + "\" has no extension");
-        }
+        return getFileExtension(ofFile.getAbsolutePath());
     }
 
     /**
@@ -36,7 +29,8 @@ public class FileUtil {
      * @throws IllegalArgumentException if provided file has no extension
      */
     public static String getFileExtension(String path) {
-        String fileName = path.substring(path.lastIndexOf(File.separator) + 1);
+        int startIndex = path.contains(File.separator) ? path.lastIndexOf(File.separator) + 1 : 0;
+        String fileName = path.substring(startIndex);
 
         Pattern extensionPattern = Pattern.compile("\\.(\\w{1,4})$");
         Matcher extensionmatcher = extensionPattern.matcher(fileName);
