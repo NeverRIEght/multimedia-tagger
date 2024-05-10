@@ -9,9 +9,9 @@ public class FileUtil {
      * This method returns the extension of the provided file
      *
      * @param ofFile file to get extension from
-     * @throws NullPointerException if provided file is null or not a file
-     * @throws IllegalArgumentException if provided file has no extension
      * @return Extension of the provided file in lowercase ("txt", "exe", etc.)
+     * @throws NullPointerException     if provided file is null or not a file
+     * @throws IllegalArgumentException if provided file has no extension
      */
     public static String getFileExtension(File ofFile) {
         if (!ofFile.isFile()) {
@@ -25,6 +25,26 @@ public class FileUtil {
             return extensionmatcher.group(1).toLowerCase();
         } else {
             throw new IllegalArgumentException("File \"" + ofFile.getName() + "\" has no extension");
+        }
+    }
+
+    /**
+     * This method returns the extension based on the provided path to file. Can be used with non-existing files.
+     *
+     * @param path path to the file to get extension from
+     * @return Extension of the provided file in lowercase ("txt", "exe", etc.)
+     * @throws IllegalArgumentException if provided file has no extension
+     */
+    public static String getFileExtension(String path) {
+        String fileName = path.substring(path.lastIndexOf(File.separator) + 1);
+
+        Pattern extensionPattern = Pattern.compile("\\.(\\w{1,4})$");
+        Matcher extensionmatcher = extensionPattern.matcher(fileName);
+
+        if (extensionmatcher.find()) {
+            return extensionmatcher.group(1).toLowerCase();
+        } else {
+            throw new IllegalArgumentException("File \"" + fileName + "\" has no extension");
         }
     }
 }
