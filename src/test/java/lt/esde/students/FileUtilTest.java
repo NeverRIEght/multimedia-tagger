@@ -14,9 +14,7 @@ class FileUtilTest {
     void getFileExtensionWithNullFile() {
         File nullFile = null;
 
-        assertThrows(NullPointerException.class, () -> {
-            FileUtil.getFileExtension(nullFile);
-        });
+        assertThrows(NullPointerException.class, () -> FileUtil.getFileExtension(nullFile));
     }
 
     @Test
@@ -25,9 +23,7 @@ class FileUtilTest {
 
         try {
             testFileWithoutExtension.createNewFile();
-            assertThrows(IllegalArgumentException.class, () -> {
-                FileUtil.getFileExtension(testFileWithoutExtension);
-            });
+            assertThrows(IllegalArgumentException.class, () -> FileUtil.getFileExtension(testFileWithoutExtension));
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -37,11 +33,13 @@ class FileUtilTest {
 
     @Test
     void getFileExtensionTxt() {
-        File testFileTxt = new File("Example.txt");
+        String testStringTxt = "Example.txt";
+        File testFileTxt = new File(testStringTxt);
 
         try {
             testFileTxt.createNewFile();
             assertEquals("txt", FileUtil.getFileExtension(testFileTxt));
+            assertEquals("txt", FileUtil.getFileExtension(testStringTxt));
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -51,11 +49,13 @@ class FileUtilTest {
 
     @Test
     void getFileExtensionExe() {
-        File testFileExe = new File("ExeFile.exe");
+        String testStringExe = "ExeFile.exe";
+        File testFileExe = new File(testStringExe);
 
         try {
             testFileExe.createNewFile();
             assertEquals("exe", FileUtil.getFileExtension(testFileExe));
+            assertEquals("exe", FileUtil.getFileExtension(testStringExe));
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -65,11 +65,13 @@ class FileUtilTest {
 
     @Test
     void getFileExtensionWithSpaces() {
-        File testFileWithSpace = new File("File with spaces.txt");
+        String testStringWithSpace = "File with spaces.txt";
+        File testFileWithSpace = new File(testStringWithSpace);
 
         try {
             testFileWithSpace.createNewFile();
             assertEquals("txt", FileUtil.getFileExtension(testFileWithSpace));
+            assertEquals("txt", FileUtil.getFileExtension(testStringWithSpace));
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -91,6 +93,7 @@ class FileUtilTest {
             try {
                 testFileWithPoints.createNewFile();
                 assertEquals("txt", FileUtil.getFileExtension(testFileWithPoints));
+                assertEquals("txt", FileUtil.getFileExtension(fileName.toString()));
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -101,15 +104,24 @@ class FileUtilTest {
 
     @Test
     void getFileExtensionWithBigLetters() {
-        File testFileWithBigLetters = new File("FileWithBigLetters.TXT");
+        String testStringWithBigLetters = "FileWithBigLetters.TXT";
+        File testFileWithBigLetters = new File(testStringWithBigLetters);
 
         try {
             testFileWithBigLetters.createNewFile();
             assertEquals("txt", FileUtil.getFileExtension(testFileWithBigLetters));
+            assertEquals("txt", FileUtil.getFileExtension(testStringWithBigLetters));
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             testFileWithBigLetters.delete();
         }
+    }
+
+    @Test
+    void getStringFileExtensionWithNoExtension() {
+        String testFileWithoutExtension = "FileWithoutExtension";
+
+        assertThrows(IllegalArgumentException.class, () -> FileUtil.getFileExtension(testFileWithoutExtension));
     }
 }
