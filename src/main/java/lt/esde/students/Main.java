@@ -1,7 +1,14 @@
 package lt.esde.students;
 
+import lt.esde.students.metadata.exif.entities.ExifTag;
+import org.htmlunit.WebClient;
+import org.htmlunit.html.*;
+
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     /**
