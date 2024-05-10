@@ -1,6 +1,5 @@
 package lt.esde.students.serializer;
 
-import lt.esde.students.FileUtil;
 import lt.esde.students.metadata.exif.entities.ExifTag;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,7 +36,10 @@ public class JsonSerializer {
         if (file.isFile()) {
             throw new IllegalArgumentException("File already exists");
         }
-        if (!FileUtil.getFileExtension(file).equals("json")) {
+//        if (!FileUtil.getFileExtension(file).equals("json")) {
+//            throw new IllegalArgumentException("File is not a json file");
+//        }
+        if (!file.getAbsolutePath().endsWith(".json")) {
             throw new IllegalArgumentException("File is not a json file");
         }
 
