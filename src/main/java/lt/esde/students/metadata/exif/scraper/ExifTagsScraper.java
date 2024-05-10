@@ -4,7 +4,6 @@ import lt.esde.students.FileUtil;
 import lt.esde.students.metadata.exif.entities.ExifTag;
 import org.htmlunit.WebClient;
 import org.htmlunit.html.*;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -58,23 +57,6 @@ public class ExifTagsScraper {
                 writable,
                 group,
                 valuesNotes);
-    }
-
-    public static JSONObject serializeToJson(List<ExifTag> tags) {
-        JSONObject json = new JSONObject();
-
-        JSONArray jsonTagsArray = new JSONArray();
-        for (ExifTag tag : tags) {
-            JSONObject jsonTag = new JSONObject();
-            jsonTag.put("Id", tag.getId());
-            jsonTag.put("Name", tag.getName());
-            jsonTag.put("Writable", tag.getWritable());
-            jsonTag.put("Group", tag.getGroup());
-            jsonTag.put("ValuesNotes", tag.getValuesNotes());
-            jsonTagsArray.put(jsonTag);
-        }
-
-        return json;
     }
 
     public static void saveJsonAsFile(JSONObject json, String path) {
