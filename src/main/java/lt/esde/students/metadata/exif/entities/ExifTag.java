@@ -1,5 +1,8 @@
 package lt.esde.students.metadata.exif.entities;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ExifTag {
     private final int id;
     private final String name;
@@ -12,7 +15,18 @@ public class ExifTag {
         this.id = id;
         this.name = name.trim();
         this.writable = writable.trim();
-        this.group = group.trim();
+
+        group = group.trim();
+        if (group.equals("-")) {
+            group = "";
+        } else if (group.startsWith("-")) {
+            Pattern groupPattern = Pattern.compile("-+(.\\w+)");
+            Matcher groupMatcher = groupPattern.matcher(group);
+            if (groupMatcher.find()) {
+                group = groupMatcher.group(1);
+            }
+        }
+        this.group = group;
 
         if (valuesNotes.replace("\u00a0","").trim().isEmpty()) {
             this.valuesNotes = "";
