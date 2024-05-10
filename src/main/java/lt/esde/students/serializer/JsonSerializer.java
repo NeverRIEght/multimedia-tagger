@@ -24,6 +24,7 @@ public class JsonSerializer {
             jsonTag.put("ValuesNotes", tag.getValuesNotes());
             jsonTagsArray.put(jsonTag);
         }
+        json.put("ExifTags", jsonTagsArray);
 
         return json;
     }
