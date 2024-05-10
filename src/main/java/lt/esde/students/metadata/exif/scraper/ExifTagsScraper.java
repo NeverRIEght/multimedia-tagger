@@ -58,25 +58,4 @@ public class ExifTagsScraper {
                 group,
                 valuesNotes);
     }
-
-    public static void saveJsonAsFile(JSONObject json, String path) {
-        saveJsonAsFile(json, new File(path));
-    }
-
-    public static void saveJsonAsFile(JSONObject json, File file) {
-        if (file.isFile()) {
-            throw new IllegalArgumentException("File already exists");
-        }
-        if (!FileUtil.getFileExtension(file).equals("json")) {
-            throw new IllegalArgumentException("File is not a json file");
-        }
-
-        try {
-            FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
-            fileWriter.write(json.toString(1));
-            fileWriter.close();
-        } catch (IOException e) {
-            throw new RuntimeException("Can not save json as file");
-        }
-    }
 }
