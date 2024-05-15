@@ -6,6 +6,7 @@ module multimedia.tagger {
     requires org.apache.commons.imaging;
     requires org.apache.commons.io;
     requires org.json;
+    requires javafx.fxml;
 
     opens lt.esde.students to javafx.fxml;
     exports lt.esde.students.ui;
