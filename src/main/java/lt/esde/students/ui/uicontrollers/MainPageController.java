@@ -1,7 +1,7 @@
 package lt.esde.students.ui.uicontrollers;
 
-import lt.esde.students.controllers.FileUtil;
-import lt.esde.students.controllers.TagController;
+import lt.esde.students.utils.FileUtil;
+import lt.esde.students.utils.TagUtil;
 import lt.esde.students.entities.Tag;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,7 +16,7 @@ import org.controlsfx.control.textfield.TextFields;
 import java.io.File;
 import java.util.*;
 
-import static lt.esde.students.controllers.FileUtil.checkFile;
+import static lt.esde.students.utils.FileUtil.checkFile;
 
 public class MainPageController {
     public Button selectFolderButton;
@@ -26,7 +26,7 @@ public class MainPageController {
     public ListView<Tag> tagsListView;
     public ImageView imageView;
 
-    private final TagController tagController = new TagController();
+    private final TagUtil tagUtil = new TagUtil();
 
     private File currentFile;
 
@@ -82,7 +82,7 @@ public class MainPageController {
 
         List<File> files = FileUtil.getImages(initialFolder);
 
-        allTags.addAll(tagController.getTagsFromFiles(files));
+        allTags.addAll(tagUtil.getTagsFromFiles(files));
 
         updateFilesListView(files);
         updateAutoCompletionProperties();
@@ -106,12 +106,12 @@ public class MainPageController {
         imageView.setImage(new Image(currentFile.toURI().toString()));
 
         currentTags.clear();
-        currentTags.addAll(tagController.getTagsFromFile(currentFile));
+        currentTags.addAll(tagUtil.getTagsFromFile(currentFile));
         updateTagsList();
     }
 
     private void addTag(String tagText) {
-        Tag currentTag = tagController.parseTagText(tagText);
+        Tag currentTag = tagUtil.parseTagText(tagText);
         currentTags.add(currentTag);
         allTags.add(currentTag);
         updateAutoCompletionProperties();

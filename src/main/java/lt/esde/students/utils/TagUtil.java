@@ -1,4 +1,4 @@
-package lt.esde.students.controllers;
+package lt.esde.students.utils;
 
 import lt.esde.students.entities.Tag;
 import lt.esde.students.entities.TagType;
@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static lt.esde.students.controllers.FileUtil.getFile;
+import static lt.esde.students.utils.FileUtil.getFile;
 
-public class TagController {
+public class TagUtil {
 
     public Tag parseTagText(String tagText) {
         if (tagText == null || tagText.isEmpty()) throw new RuntimeException("Tag text is empty");

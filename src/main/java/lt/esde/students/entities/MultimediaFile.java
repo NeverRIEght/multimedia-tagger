@@ -3,7 +3,7 @@ package lt.esde.students.entities;
 import java.io.File;
 import java.time.LocalDateTime;
 
-import static lt.esde.students.FileUtil.getFileExtension;
+import static lt.esde.students.utils.FileUtil.getFileExtension;
 
 public class MultimediaFile {
     private String name;

@@ -1,13 +1,9 @@
 package lt.esde.students.metadata.exif.scraper;
 
-import lt.esde.students.FileUtil;
 import lt.esde.students.metadata.exif.entities.ExifTag;
 import org.htmlunit.WebClient;
 import org.htmlunit.html.*;
-import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
