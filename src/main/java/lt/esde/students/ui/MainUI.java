@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lt.esde.students.Main;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +21,8 @@ public class MainUI extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(new File("D:\\Programming\\Java\\multimedia-tagger\\src\\main\\resources\\main-page.fxml").toURI().toURL());
+//        FXMLLoader fxmlLoader = new FXMLLoader(new File("D:\\Programming\\Java\\multimedia-tagger\\src\\main\\resources\\main-page.fxml").toURI().toURL());
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getClassLoader().getResource("main-page.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1200, 600);
 
         stage.setResizable(false);
