@@ -1,13 +1,17 @@
-module multimedia.tagger {
-    requires htmlunit;
+module lt.esde.students {
+    requires javafx.controls;
+    requires javafx.fxml;
+    requires org.controlsfx.controls;
     requires java.desktop;
-    requires javafx.graphics;
-    requires metadata.extractor;
     requires org.apache.commons.imaging;
     requires org.apache.commons.io;
+    requires metadata.extractor;
+    requires htmlunit;
     requires org.json;
-    requires javafx.fxml;
 
-    opens lt.esde.students to javafx.fxml;
-    exports lt.esde.students.ui;
+
+    exports lt.esde.students.ui to javafx.graphics;
+    exports lt.esde.students.ui.uicontrollers to javafx.fxml;
+
+    opens lt.esde.students.ui.uicontrollers to javafx.fxml;
 }
