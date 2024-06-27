@@ -48,12 +48,12 @@ public class FileUtil {
     }
 
     public static List<File> getFiles(File directory) {
-        directory = checkDirectory(directory);
+        checkDirectory(directory);
         return getFilesFromDirectory(new ArrayList<>(), directory);
     }
 
     public static List<File> getImages(File directory) {
-        directory = checkDirectory(directory);
+        checkDirectory(directory);
         List<File> files = getFilesFromDirectory(new ArrayList<>(), directory);
         return files.stream()
                 .filter(file -> {
