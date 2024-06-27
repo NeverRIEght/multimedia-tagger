@@ -30,8 +30,8 @@ public class FileUtil {
         return file;
     }
 
-    public static File getDirectory(String Path) {
-        File dir = Paths.get(Path).toFile();
+    public static File getDirectory(String path) {
+        File dir = Paths.get(path).toFile();
         return checkDirectory(dir);
     }
 
