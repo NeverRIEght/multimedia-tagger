@@ -28,24 +28,20 @@ public class TagUtil {
     }
 
     private TagType parseTagType(String tagTypeString) {
-        TagType parsedTagType;
-
-        switch (tagTypeString) {
-            case "char", "character", "person", "per", "pers" -> parsedTagType = TagType.PERSON;
-            case "clothes", "clothing" -> parsedTagType = TagType.CLOTHES;
-            case "fandom", "topic" -> parsedTagType = TagType.FANDOM;
-            case "author", "creator", "auth", "aut" -> parsedTagType = TagType.AUTHOR;
-            case "source", "origin", "src" -> parsedTagType = TagType.SOURCE;
-            case "rating", "sfw", "nsfw" -> parsedTagType = TagType.RATING;
-            case "group", "grp" -> parsedTagType = TagType.GROUP;
-            case "fav", "favourite", "favorite" -> parsedTagType = TagType.FAVOURITE;
-            case "date", "creation", "created", "credate" -> parsedTagType = TagType.CREATION_DATE;
-            case "mod", "modification", "modified", "moddate" -> parsedTagType = TagType.MODIFICATION_DATE;
-            case "location", "loc" -> parsedTagType = TagType.LOCATION;
-            default -> parsedTagType = TagType.GENERAL;
-        }
-
-        return parsedTagType;
+        return switch (tagTypeString) {
+            case "char", "character", "person", "per", "pers" -> TagType.PERSON;
+            case "clothes", "clothing" -> TagType.CLOTHES;
+            case "fandom", "topic" -> TagType.FANDOM;
+            case "author", "creator", "auth", "aut" -> TagType.AUTHOR;
+            case "source", "origin", "src" -> TagType.SOURCE;
+            case "rating", "sfw", "nsfw" -> TagType.RATING;
+            case "group", "grp" -> TagType.GROUP;
+            case "fav", "favourite", "favorite" -> TagType.FAVOURITE;
+            case "date", "creation", "created", "credate" -> TagType.CREATION_DATE;
+            case "mod", "modification", "modified", "moddate" -> TagType.MODIFICATION_DATE;
+            case "location", "loc" -> TagType.LOCATION;
+            default -> TagType.GENERAL;
+        };
     }
 
     public List<Tag> getTagsFromFile(String path) {
