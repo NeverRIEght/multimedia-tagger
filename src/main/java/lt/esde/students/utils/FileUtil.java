@@ -36,7 +36,6 @@ public class FileUtil {
     }
 
     public static File getDirectory(DirectoryChooser directoryChooser) {
-//        return new File("D:\\Multimedia\\Images\\other\\NeverRIEght-logo");
         File dir = directoryChooser.showDialog(null);
         return checkDirectory(dir);
     }
