@@ -67,7 +67,7 @@ public class DateUtil {
                     String monthString = dateMatcher.group(1);
                     String yearString = dateMatcher.group(3);
 
-                    monthString = Month.getNumericValue(monthString);
+                    monthString = String.valueOf(Month.getNumericValue(monthString));
 
                     dateString = String.format("%s-%s-%s", yearString, monthString, dayString);
                 }

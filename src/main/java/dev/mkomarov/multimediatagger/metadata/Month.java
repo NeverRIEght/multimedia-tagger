@@ -1,36 +1,36 @@
 package dev.mkomarov.multimediatagger.metadata;
 
 public enum Month {
-    JAN("01"),
-    FEB("02"),
-    MAR("03"),
-    APR("04"),
-    MAY("05"),
-    JUN("06"),
-    JUL("07"),
-    AUG("08"),
-    SEP("09"),
-    OCT("10"),
-    NOV("11"),
-    DEC("12");
+    JAN(1),
+    FEB(2),
+    MAR(3),
+    APR(4),
+    MAY(5),
+    JUN(6),
+    JUL(7),
+    AUG(8),
+    SEP(9),
+    OCT(10),
+    NOV(11),
+    DEC(12);
 
-    private final String monthNumber;
+    private final int monthNumber;
 
-    Month(String monthNumber) {
+    Month(int monthNumber) {
         this.monthNumber = monthNumber;
     }
 
-    public String getMonthNumber() {
+    public int getMonthNumber() {
         return monthNumber;
     }
 
-    public static String getNumericValue(String monthString) {
+    public static int getNumericValue(String monthString) {
         for (Month month : Month.values()) {
             if (month.name().equalsIgnoreCase(monthString)) {
                 return month.getMonthNumber();
             }
         }
 
-        return null; // или можно вернуть "00" или что-то подобное в случае некорректного ввода
+        throw new IllegalArgumentException("Invalid month string: " + monthString);
     }
 }
