@@ -6,6 +6,14 @@ import java.util.List;
 
 public class Main {
     /**
+     * Path to the main project folder
+     */
+    public static final String PROJECT_PATH;
+    /**
+     * Path to the source code folder
+     */
+    public static final String SOURCE_CODE_PATH;
+    /**
      * Name of the folder with test images
      */
     public static final String TEST_FOLDER_NAME;
@@ -30,9 +38,17 @@ public class Main {
     public static final List<File> TEST_IMG_PHOTOS_LIST;
 
     static {
+        PROJECT_PATH = Paths.get("")
+                .toAbsolutePath() + "";
+        SOURCE_CODE_PATH = PROJECT_PATH +
+                File.separator + "src" +
+                File.separator + "main" +
+                File.separator + "java" +
+                File.separator + "lt" +
+                File.separator + "esde" +
+                File.separator + "students";
         TEST_FOLDER_NAME = "testimg";
-        TEST_IMG_FOLDER_PATH = Paths.get("")
-                .toAbsolutePath() + File.separator + TEST_FOLDER_NAME;
+        TEST_IMG_FOLDER_PATH = PROJECT_PATH + File.separator + TEST_FOLDER_NAME;
         TEST_IMG_WITH_METADATA_PATH = new File(TEST_IMG_FOLDER_PATH + File.separator + "eifel.jpg");
         TEST_IMG_WITHOUT_METADATA_PATH = new File(TEST_IMG_FOLDER_PATH + File.separator + "maricat.jpg");
         TEST_IMG_PHOTOS_LIST = List.of(
