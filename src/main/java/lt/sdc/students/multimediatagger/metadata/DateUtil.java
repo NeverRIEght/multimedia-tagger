@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static lt.sdc.students.multimediatagger.metadata.exif.ExifReader.readExifTags;
+import static lt.sdc.students.multimediatagger.metadata.ExifReader.readExifTags;
 
 public class DateUtil {
     private static final String UNICODE_COLON = "\\u003A";
