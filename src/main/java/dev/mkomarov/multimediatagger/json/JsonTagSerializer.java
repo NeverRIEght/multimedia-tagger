@@ -13,6 +13,7 @@ import java.util.List;
  * Serializes tags to JSON format and saves them to a file.
  */
 public class JsonTagSerializer {
+    private static final String SOFTWARE_NAME = "MultimediaTagger";
     private static final String STANDARD_VERSION = "1.0";
 
     private JsonTagSerializer() {
@@ -27,7 +28,8 @@ public class JsonTagSerializer {
     public static void serializeTagsForFile(List<Tag> tags, File forFile) {
         JSONObject forFileJsonObject = new JSONObject();
         forFileJsonObject.put("fileName", forFile.getName());
-        forFileJsonObject.put("version", STANDARD_VERSION);
+        forFileJsonObject.put("software", SOFTWARE_NAME);
+        forFileJsonObject.put("tagSystemVersion", STANDARD_VERSION);
         forFileJsonObject.put("tags", serializeTags(tags));
 
         String json = getJsonString(forFileJsonObject);
