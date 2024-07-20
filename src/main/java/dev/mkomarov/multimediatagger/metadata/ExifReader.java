@@ -9,9 +9,6 @@ import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.common.ImageMetadata;
 import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
-import org.apache.commons.imaging.formats.tiff.TiffField;
-import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
-import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ExifReader {
+
+    private ExifReader() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * Parses the whole set of EXIF tags for specific file and returns it as a <code>Hashmap</code>
