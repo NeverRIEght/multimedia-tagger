@@ -1,4 +1,4 @@
-package lt.sdc.students.multimediatagger.metadata;
+package dev.mkomarov.multimediatagger.metadata;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;

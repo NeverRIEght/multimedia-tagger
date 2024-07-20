@@ -1,4 +1,4 @@
-package lt.sdc.students.multimediatagger.ui;
+package dev.mkomarov.multimediatagger.ui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

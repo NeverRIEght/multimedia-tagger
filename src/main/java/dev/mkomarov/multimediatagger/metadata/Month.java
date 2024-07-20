@@ -1,4 +1,4 @@
-package lt.sdc.students.multimediatagger.metadata;
+package dev.mkomarov.multimediatagger.metadata;
 
 public enum Month {
     JAN("01"),

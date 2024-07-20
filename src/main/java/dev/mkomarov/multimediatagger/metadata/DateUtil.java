@@ -1,4 +1,4 @@
-package lt.sdc.students.multimediatagger.metadata;
+package dev.mkomarov.multimediatagger.metadata;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -6,8 +6,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static lt.sdc.students.multimediatagger.metadata.ExifReader.readExifTags;
 
 public class DateUtil {
     private static final String UNICODE_COLON = "\\u003A";
@@ -42,7 +40,7 @@ public class DateUtil {
 
         Locale.setDefault(Locale.ENGLISH);
 
-        Map<String, String> tagsMap = readExifTags(fromFile);
+        Map<String, String> tagsMap = ExifReader.readExifTags(fromFile);
         Set<String> dateStrings = filterDateFields(tagsMap);
 
         List<LocalDateTime> outputDates = new ArrayList<>();

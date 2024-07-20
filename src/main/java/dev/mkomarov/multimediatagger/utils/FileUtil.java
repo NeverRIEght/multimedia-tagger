@@ -1,4 +1,4 @@
-package lt.sdc.students.multimediatagger.utils;
+package dev.mkomarov.multimediatagger.utils;
 
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;

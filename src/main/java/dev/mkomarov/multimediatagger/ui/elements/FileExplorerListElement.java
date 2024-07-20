@@ -1,11 +1,11 @@
-package lt.sdc.students.multimediatagger.ui.elements;
+package dev.mkomarov.multimediatagger.ui.elements;
 
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import lt.sdc.students.multimediatagger.utils.FileUtil;
+import dev.mkomarov.multimediatagger.utils.FileUtil;
 
 import java.io.File;
 

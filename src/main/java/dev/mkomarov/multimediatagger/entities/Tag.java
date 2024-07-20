@@ -1,4 +1,4 @@
-package lt.sdc.students.multimediatagger.entities;
+package dev.mkomarov.multimediatagger.entities;
 
 import java.util.Objects;
 

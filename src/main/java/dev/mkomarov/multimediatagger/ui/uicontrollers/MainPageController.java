@@ -1,9 +1,9 @@
-package lt.sdc.students.multimediatagger.ui.uicontrollers;
+package dev.mkomarov.multimediatagger.ui.uicontrollers;
 
-import lt.sdc.students.multimediatagger.ui.elements.FileExplorerListElement;
-import lt.sdc.students.multimediatagger.utils.FileUtil;
-import lt.sdc.students.multimediatagger.utils.TagUtil;
-import lt.sdc.students.multimediatagger.entities.Tag;
+import dev.mkomarov.multimediatagger.ui.elements.FileExplorerListElement;
+import dev.mkomarov.multimediatagger.utils.FileUtil;
+import dev.mkomarov.multimediatagger.utils.TagUtil;
+import dev.mkomarov.multimediatagger.entities.Tag;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -17,7 +17,7 @@ import org.controlsfx.control.textfield.TextFields;
 import java.io.File;
 import java.util.*;
 
-import static lt.sdc.students.multimediatagger.utils.FileUtil.checkFile;
+import static dev.mkomarov.multimediatagger.utils.FileUtil.checkFile;
 
 public class MainPageController {
     public Button selectFolderButton;

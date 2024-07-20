@@ -1,4 +1,4 @@
-package lt.sdc.students.multimediatagger;
+package dev.mkomarov.multimediatagger;
 
 import java.io.File;
 import java.nio.file.Paths;

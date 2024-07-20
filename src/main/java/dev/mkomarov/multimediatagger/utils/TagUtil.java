@@ -1,14 +1,14 @@
-package lt.sdc.students.multimediatagger.utils;
+package dev.mkomarov.multimediatagger.utils;
 
-import lt.sdc.students.multimediatagger.entities.Tag;
-import lt.sdc.students.multimediatagger.entities.TagType;
+import dev.mkomarov.multimediatagger.entities.Tag;
+import dev.mkomarov.multimediatagger.entities.TagType;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static lt.sdc.students.multimediatagger.utils.FileUtil.getFile;
+import static dev.mkomarov.multimediatagger.utils.FileUtil.getFile;
 
 public class TagUtil {
 

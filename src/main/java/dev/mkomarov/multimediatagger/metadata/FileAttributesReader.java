@@ -1,4 +1,4 @@
-package lt.sdc.students.multimediatagger.metadata;
+package dev.mkomarov.multimediatagger.metadata;
 
 import java.io.IOException;
 import java.nio.file.Files;

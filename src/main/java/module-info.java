@@ -10,8 +10,8 @@ module lt.esde.students {
     requires org.json;
 
 
-    exports lt.sdc.students.multimediatagger.ui to javafx.graphics;
-    exports lt.sdc.students.multimediatagger.ui.uicontrollers to javafx.fxml;
+    exports dev.mkomarov.multimediatagger.ui to javafx.graphics;
+    exports dev.mkomarov.multimediatagger.ui.uicontrollers to javafx.fxml;
 
-    opens lt.sdc.students.multimediatagger.ui.uicontrollers to javafx.fxml;
+    opens dev.mkomarov.multimediatagger.ui.uicontrollers to javafx.fxml;
 }
