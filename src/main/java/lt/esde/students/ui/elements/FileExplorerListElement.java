@@ -20,8 +20,10 @@ public class FileExplorerListElement extends HBox {
         if (file == null || !file.exists()) return;
 
         if (file.isFile()) {
-            Image fileImage = new Image(file.getAbsolutePath());
+            Image fileImage = new Image(file.toURI().toString());
             iconView = new ImageView(fileImage);
+            iconView.setFitWidth(60);
+
             titleLabel = new Label(file.getName());
 
             detailsLabel1 = new Label(fileImage.getWidth() + "x" + fileImage.getHeight());
@@ -29,6 +31,8 @@ public class FileExplorerListElement extends HBox {
             detailsLabel3 = new Label(file.length() + " bytes");
         } else if (file.isDirectory()) {
             iconView = null;
+            iconView.setFitWidth(60);
+
             titleLabel = new Label(file.getName());
 
             detailsLabel1 = new Label(String.valueOf(file.listFiles().length));
@@ -36,12 +40,8 @@ public class FileExplorerListElement extends HBox {
             detailsLabel3 = new Label(file.length() + " bytes");
         }
 
-
-        iconView.setFitWidth(60);
         iconView.setFitHeight(60);
         titleLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-
 
         VBox detailsBox = new VBox(titleLabel, detailsLabel1, detailsLabel2, detailsLabel3);
         detailsBox.setSpacing(5);
