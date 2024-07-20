@@ -14,7 +14,7 @@ public enum TagType {
     RATING,
     SOURCE;
 
-    public TagType fromString(String tagType) {
+    public TagType createFromString(String tagType) {
         return TagType.valueOf(tagType.toUpperCase());
     }
 
