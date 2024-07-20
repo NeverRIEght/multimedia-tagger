@@ -10,6 +10,23 @@ import java.util.stream.Collectors;
 import static lt.esde.students.metadata.exif.ExifReader.readExifTags;
 
 public class DateUtil {
+    private static final String UNICODE_COLON = "\\u003A";
+    private static final Pattern DATE_KEY_PATTERN = Pattern.compile("date|Date");
+    private static final Pattern DATE_PATTERN = Pattern.compile("(\\d{4}" +
+            UNICODE_COLON +
+            "\\d{2}" +
+            UNICODE_COLON +
+            "\\d{2})");
+
+    private static final Pattern ADVANCED_DATE_PATTERN = Pattern.compile(
+            "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)" +
+                    "\\s(\\d{2}).+(\\d{4})");
+
+    private static final Pattern TIME_PATTERN = Pattern.compile("\\D+(\\d{2}" +
+            UNICODE_COLON +
+            "\\d{2}" +
+            UNICODE_COLON +
+            "\\d{2})");
     /**
      * Method parses the metadata from the <code>File</code> and returns a <code>List</code> of dates inside of it.
      * <p> Can return an empty list
@@ -25,94 +42,44 @@ public class DateUtil {
 
         Locale.setDefault(Locale.ENGLISH);
 
-        Map<String, String> map = readExifTags(fromFile);
-        List<String> dateStrings = new ArrayList<>();
-
-        Pattern timePattern = Pattern.compile("[0-9]{2}\\u003A[0-9]{2}\\u003A[0-9]{2}");
-        Pattern dateKeyPattern = Pattern.compile("date|Date");
-
-        String datePatternString1 = "([0-9]{4}\\u003A[0-9]{2}\\u003A[0-9]{2})";
-        String datePatternString2 = "([0-9]{4}\\u002D[0-9]{2}\\u002D[0-9]{2})";
-        Pattern datePattern = Pattern.compile(datePatternString1 + "|" + datePatternString2);
-
-        for (Map.Entry<String, String> item : map.entrySet()) {
-            String itemValueStr = item.getValue();
-            String itemKeyStr = item.getKey();
-
-            Matcher dateValueMatcher = timePattern.matcher(itemValueStr);
-            Matcher dateKeyMatcher = dateKeyPattern.matcher(itemKeyStr);
-
-            if (dateValueMatcher.find() || dateKeyMatcher.find()) {
-                dateStrings.add(itemValueStr);
-            }
-        }
+        Map<String, String> tagsMap = readExifTags(fromFile);
+        Set<String> dateStrings = filterDateFields(tagsMap);
 
         List<LocalDateTime> outputDates = new ArrayList<>();
 
         for (String currentDateString : dateStrings) {
-            Matcher dateMatcher = datePattern.matcher(currentDateString);
             String dateString = "";
+
+            Matcher dateMatcher = DATE_PATTERN.matcher(currentDateString);
             if (dateMatcher.find()) {
-                int startIndex = dateMatcher.start();
-                int endIndex = dateMatcher.end();
-                dateString = currentDateString.substring(startIndex, endIndex);
-                dateString = dateString.replaceAll(":", "-");
-                currentDateString = currentDateString.substring(endIndex);
+                dateString = dateMatcher.group(1).replace(":", "-");
             }
 
             if (dateString.isEmpty()) {
-                Pattern monthDayPattern = Pattern.compile(
-                        "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\s[0-9]{2}"
-                );
-                Pattern yearPattern = Pattern.compile("\\u003A[0-9]{2}\\s[0-9]{4}");
+                dateMatcher = ADVANCED_DATE_PATTERN.matcher(currentDateString);
+                if (dateMatcher.find()) {
+                    String dayString = dateMatcher.group(2);
+                    String monthString = dateMatcher.group(1);
+                    String yearString = dateMatcher.group(3);
 
-                Matcher monthDayMatcher = monthDayPattern.matcher(currentDateString);
-                String monthString = "";
-                String dayString = "";
-                if (monthDayMatcher.find()) {
-                    int startIndex = monthDayMatcher.start();
-                    int endIndex = monthDayMatcher.end();
-                    monthString = currentDateString.substring(startIndex, endIndex - 3);
-                    dayString = currentDateString.substring(startIndex + 4, endIndex);
-                }
+                    monthString = Month.getNumericValue(monthString);
 
-                Matcher yearMatcher = yearPattern.matcher(currentDateString);
-                String yearString = "";
-                if (yearMatcher.find()) {
-                    int startIndex = yearMatcher.start();
-                    int endIndex = yearMatcher.end();
-                    yearString = currentDateString.substring(startIndex + 4, endIndex);
-                }
-
-                if (!monthString.isEmpty() && !dayString.isEmpty() && !yearString.isEmpty()) {
-                    switch (monthString) {
-                        case "Jan" -> monthString = "01";
-                        case "Feb" -> monthString = "02";
-                        case "Mar" -> monthString = "03";
-                        case "Apr" -> monthString = "04";
-                        case "May" -> monthString = "05";
-                        case "Jun" -> monthString = "06";
-                        case "Jul" -> monthString = "07";
-                        case "Aug" -> monthString = "08";
-                        case "Sep" -> monthString = "09";
-                        case "Oct" -> monthString = "10";
-                        case "Nov" -> monthString = "11";
-                        case "Dec" -> monthString = "12";
-                    }
-
-                    dateString = yearString + "-" + monthString + "-" + dayString;
+                    dateString = String.format("%s-%s-%s", yearString, monthString, dayString);
                 }
             }
 
-            Matcher timeMatcher = timePattern.matcher(currentDateString);
             String timeString = "";
+
+            Matcher timeMatcher = TIME_PATTERN.matcher(currentDateString);
             if (timeMatcher.find()) {
-                int startIndex = timeMatcher.start();
-                int endIndex = timeMatcher.end();
-                timeString = currentDateString.substring(startIndex, endIndex);
+                timeString = timeMatcher.group(1);
             }
 
-            if (!timeString.isEmpty() && !dateString.isEmpty()) {
+            if (timeString.isEmpty()) {
+                timeString = "00:00:00";
+            }
+
+            if (!dateString.isEmpty()) {
                 LocalDateTime dateTime = LocalDateTime.parse(dateString + "T" + timeString);
                 outputDates.add(dateTime);
             }
@@ -121,6 +88,20 @@ public class DateUtil {
         outputDates = outputDates.stream().distinct().collect(Collectors.toList());
 
         return outputDates;
+    }
+
+    private static Set<String> filterDateFields(Map<String, String> tagsMap) {
+        Set<String> dateStrings = new HashSet<>();
+
+        for (Map.Entry<String, String> entry : tagsMap.entrySet()) {
+            Matcher dateKeyMatcher = DATE_KEY_PATTERN.matcher(entry.getKey());
+
+            if (dateKeyMatcher.find()) {
+                dateStrings.add(entry.getValue().replace("'", ""));
+            }
+        }
+
+        return dateStrings;
     }
 
     /**
