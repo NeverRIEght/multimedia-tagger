@@ -21,30 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ExifReader {
-    /**
-     * Parses the specific EXIF tag to <code>String</code>
-     * <p>
-     *
-     * @param fromFile file to parse
-     * @param tagInfo  <code>TagInfo</code> of the EXIF tag to read
-     * @return <code>String</code> with the data found. Might be null in case the field is empty
-     * @see ExifTagConstants
-     */
-    public static String readExifTag(final File fromFile, final TagInfo tagInfo) {
-        try {
-            final ImageMetadata metadata = Imaging.getMetadata(fromFile);
-            if (metadata instanceof JpegImageMetadata jpegMetadata) {
-                final TiffField field = jpegMetadata.findEXIFValueWithExactMatch(tagInfo);
-                if (field != null) {
-                    return field.getValueDescription();
-                }
-            }
-        } catch (ImageReadException | IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return null;
-    }
 
     /**
      * Parses the whole set of EXIF tags for specific file and returns it as a <code>Hashmap</code>
