@@ -5,6 +5,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import lt.esde.students.utils.FileUtil;
+
+import java.io.File;
 
 public class FileExplorerListElement extends HBox {
     private ImageView iconView;
@@ -13,20 +16,32 @@ public class FileExplorerListElement extends HBox {
     private Label detailsLabel2;
     private Label detailsLabel3;
 
-    public FileExplorerListElement(String iconPath, String title, String details1, String details2, String details3) {
-        // Иконка
-        iconView = new ImageView(new Image(iconPath));
+    public FileExplorerListElement(File file) {
+        if (file == null || !file.exists()) return;
+
+        if (file.isFile()) {
+            Image fileImage = new Image(file.getAbsolutePath());
+            iconView = new ImageView(fileImage);
+            titleLabel = new Label(file.getName());
+
+            detailsLabel1 = new Label(fileImage.getWidth() + "x" + fileImage.getHeight());
+            detailsLabel2 = new Label(FileUtil.getFileExtension(file).toUpperCase());
+            detailsLabel3 = new Label(file.length() + " bytes");
+        } else if (file.isDirectory()) {
+            iconView = null;
+            titleLabel = new Label(file.getName());
+
+            detailsLabel1 = new Label(String.valueOf(file.listFiles().length));
+            detailsLabel2 = new Label(file.listFiles().length + " without tags");
+            detailsLabel3 = new Label(file.length() + " bytes");
+        }
+
+
         iconView.setFitWidth(60);
         iconView.setFitHeight(60);
-
-        // Название файла/папки
-        titleLabel = new Label(title);
         titleLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
-        // Подробности
-        detailsLabel1 = new Label(details1);
-        detailsLabel2 = new Label(details2);
-        detailsLabel3 = new Label(details3);
+
 
         VBox detailsBox = new VBox(titleLabel, detailsLabel1, detailsLabel2, detailsLabel3);
         detailsBox.setSpacing(5);
