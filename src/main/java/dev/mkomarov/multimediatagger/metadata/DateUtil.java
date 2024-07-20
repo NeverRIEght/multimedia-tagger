@@ -1,5 +1,7 @@
 package dev.mkomarov.multimediatagger.metadata;
 
+import dev.mkomarov.multimediatagger.metadata.entity.ExifTag;
+
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -8,6 +10,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class DateUtil {
+
+    private DateUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     private static final String UNICODE_COLON = "\\u003A";
     private static final Pattern DATE_KEY_PATTERN = Pattern.compile("date|Date");
     private static final Pattern DATE_PATTERN = Pattern.compile("(\\d{4}" +
@@ -40,7 +47,7 @@ public class DateUtil {
 
         Locale.setDefault(Locale.ENGLISH);
 
-        Map<String, String> tagsMap = ExifReader.readExifTags(fromFile);
+        List<ExifTag> tagsMap = ExifReader.readExifTags(fromFile);
         Set<String> dateStrings = filterDateFields(tagsMap);
 
         List<LocalDateTime> outputDates = new ArrayList<>();
@@ -88,14 +95,14 @@ public class DateUtil {
         return outputDates;
     }
 
-    private static Set<String> filterDateFields(Map<String, String> tagsMap) {
+    private static Set<String> filterDateFields(List<ExifTag> tags) {
         Set<String> dateStrings = new HashSet<>();
 
-        for (Map.Entry<String, String> entry : tagsMap.entrySet()) {
-            Matcher dateKeyMatcher = DATE_KEY_PATTERN.matcher(entry.getKey());
+        for (ExifTag tag : tags) {
+            Matcher dateKeyMatcher = DATE_KEY_PATTERN.matcher(tag.name());
 
             if (dateKeyMatcher.find()) {
-                dateStrings.add(entry.getValue().replace("'", ""));
+                dateStrings.add(tag.value().replace("'", ""));
             }
         }
 
