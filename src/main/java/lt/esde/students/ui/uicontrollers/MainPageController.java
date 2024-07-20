@@ -1,5 +1,6 @@
 package lt.esde.students.ui.uicontrollers;
 
+import lt.esde.students.ui.elements.FileExplorerListElement;
 import lt.esde.students.utils.FileUtil;
 import lt.esde.students.utils.TagUtil;
 import lt.esde.students.entities.Tag;
@@ -21,7 +22,7 @@ import static lt.esde.students.utils.FileUtil.checkFile;
 public class MainPageController {
     public Button selectFolderButton;
     public Label currentFolderLabel;
-    public ListView<File> filesListView;
+    public ListView<FileExplorerListElement> filesListView;
     public TextField tagsInputField;
     public ListView<Tag> tagsListView;
     public ImageView imageView;
@@ -91,7 +92,10 @@ public class MainPageController {
     private void updateFilesListView(List<File> files) {
         filesListView.setStyle("-fx-control-inner-background: #313338;");
         filesListView.getItems().clear();
-        filesListView.getItems().addAll(files);
+        for (File file : files) {
+            FileExplorerListElement element = new FileExplorerListElement(file);
+            filesListView.getItems().add(element);
+        }
     }
 
     public void filesListViewClicked() {
