@@ -6,6 +6,30 @@ public class Tag {
     private TagType tagType;
     private String value;
 
+    public enum TagType {
+        AUTHOR,
+        CLOTHES,
+        CREATION_DATE,
+        FANDOM,
+        FAVOURITE,
+        GENERAL,
+        GROUP,
+        LOCATION,
+        MODIFICATION_DATE,
+        PERSON,
+        RATING,
+        SOURCE;
+
+        public TagType createFromString(String tagType) {
+            return TagType.valueOf(tagType.toUpperCase());
+        }
+
+        @Override
+        public String toString() {
+            return this.name().toLowerCase();
+        }
+    }
+
     public Tag(String value) {
         this.tagType = TagType.GENERAL;
         this.value = value;

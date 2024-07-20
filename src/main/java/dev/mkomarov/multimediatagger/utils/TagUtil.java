@@ -1,7 +1,6 @@
 package dev.mkomarov.multimediatagger.utils;
 
 import dev.mkomarov.multimediatagger.entities.Tag;
-import dev.mkomarov.multimediatagger.entities.TagType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,25 +21,25 @@ public class TagUtil {
         String tagType = tagParts[0].trim();
         String tagValue = tagParts[1].trim();
 
-        TagType parsedTagType = parseTagType(tagType);
+        Tag.TagType parsedTagType = parseTagType(tagType);
 
         return new Tag(parsedTagType, tagValue);
     }
 
-    private TagType parseTagType(String tagTypeString) {
+    private Tag.TagType parseTagType(String tagTypeString) {
         return switch (tagTypeString) {
-            case "char", "character", "person", "per", "pers" -> TagType.PERSON;
-            case "clothes", "clothing" -> TagType.CLOTHES;
-            case "fandom", "topic" -> TagType.FANDOM;
-            case "author", "creator", "auth", "aut" -> TagType.AUTHOR;
-            case "source", "origin", "src" -> TagType.SOURCE;
-            case "rating", "sfw", "nsfw" -> TagType.RATING;
-            case "group", "grp" -> TagType.GROUP;
-            case "fav", "favourite", "favorite" -> TagType.FAVOURITE;
-            case "date", "creation", "created", "credate" -> TagType.CREATION_DATE;
-            case "mod", "modification", "modified", "moddate" -> TagType.MODIFICATION_DATE;
-            case "location", "loc" -> TagType.LOCATION;
-            default -> TagType.GENERAL;
+            case "char", "character", "person", "per", "pers" -> Tag.TagType.PERSON;
+            case "clothes", "clothing" -> Tag.TagType.CLOTHES;
+            case "fandom", "topic" -> Tag.TagType.FANDOM;
+            case "author", "creator", "auth", "aut" -> Tag.TagType.AUTHOR;
+            case "source", "origin", "src" -> Tag.TagType.SOURCE;
+            case "rating", "sfw", "nsfw" -> Tag.TagType.RATING;
+            case "group", "grp" -> Tag.TagType.GROUP;
+            case "fav", "favourite", "favorite" -> Tag.TagType.FAVOURITE;
+            case "date", "creation", "created", "credate" -> Tag.TagType.CREATION_DATE;
+            case "mod", "modification", "modified", "moddate" -> Tag.TagType.MODIFICATION_DATE;
+            case "location", "loc" -> Tag.TagType.LOCATION;
+            default -> Tag.TagType.GENERAL;
         };
     }
 
