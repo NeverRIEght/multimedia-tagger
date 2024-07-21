@@ -20,7 +20,7 @@ public class Tag {
         RATING,
         SOURCE;
 
-        public TagType createFromString(String tagType) {
+        public static TagType createFromString(String tagType) {
             return TagType.valueOf(tagType.toUpperCase());
         }
 

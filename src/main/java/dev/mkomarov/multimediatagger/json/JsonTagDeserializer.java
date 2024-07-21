@@ -1,7 +1,6 @@
 package dev.mkomarov.multimediatagger.json;
 
 import dev.mkomarov.multimediatagger.entities.Tag;
-import dev.mkomarov.multimediatagger.utils.FileUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -10,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static dev.mkomarov.multimediatagger.json.JsonUtil.SOFTWARE_NAME;
@@ -22,9 +22,14 @@ public class JsonTagDeserializer {
     }
 
     public static Collection<Tag> deserializeTagsForFile(File forFile) {
-        FileUtil.checkFile(forFile);
+        if (forFile == null) throw new RuntimeException("File to deserialize tags for is null");
+        if (!forFile.exists()) throw new RuntimeException("File not found: " + forFile.getAbsolutePath());
+        if (!forFile.isFile()) throw new RuntimeException("Not a file: " + forFile.getAbsolutePath());
 
         File jsonFile = new File(JsonUtil.getJsonFilePath(forFile));
+
+        if (!jsonFile.exists()) return Collections.emptyList();
+        if (!jsonFile.isFile()) throw new RuntimeException("Not a file: " + forFile.getAbsolutePath());
 
         JSONObject jsonObject = getJsonFromFile(jsonFile);
 
@@ -60,7 +65,7 @@ public class JsonTagDeserializer {
 
     private static Tag deserializeTag(JSONObject jsonObject) {
         String tagTypeString = jsonObject.getString("tagType");
-        Tag.TagType tagType = Tag.TagType.valueOf(tagTypeString);
+        Tag.TagType tagType = Tag.TagType.createFromString(tagTypeString);
         String value = jsonObject.getString("value");
         return new Tag(tagType, value);
     }
