@@ -33,12 +33,8 @@ public class JsonTagSerializer {
         forFileJsonObject.put("tagSystemVersion", STANDARD_VERSION);
         forFileJsonObject.put("tags", serializeTags(tags));
 
-        String jsonFilePath = getJsonFilePath(forFile);
+        String jsonFilePath = JsonUtil.getJsonFilePath(forFile);
         saveJsonAsFile(forFileJsonObject, jsonFilePath);
-    }
-
-    private static String getJsonFilePath(File forFile) {
-        return forFile.getName() + ".json";
     }
 
     private static JSONArray serializeTags(Collection<Tag> tags) {

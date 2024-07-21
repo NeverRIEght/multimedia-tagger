@@ -21,15 +21,17 @@ public class JsonTagDeserializer {
     private JsonTagDeserializer() {
     }
 
-    public static Collection<Tag> deserializeTagsFromFile(File fromFile) {
-        FileUtil.checkFile(fromFile);
+    public static Collection<Tag> deserializeTagsForFile(File forFile) {
+        FileUtil.checkFile(forFile);
 
-        JSONObject jsonObject = getJsonFromFile(fromFile);
+        File jsonFile = new File(JsonUtil.getJsonFilePath(forFile));
+
+        JSONObject jsonObject = getJsonFromFile(jsonFile);
 
         String fileName = jsonObject.getString("fileName");
 
-        if (!fileName.equals(fromFile.getName())) {
-            throw new RuntimeException("File name in JSON does not match the file name. Expected: " + fromFile.getName() + ", actual: " + fileName);
+        if (!fileName.equals(forFile.getName())) {
+            throw new RuntimeException("File name in JSON does not match the file name. Expected: " + forFile.getName() + ", actual: " + fileName);
         }
 
         String software = jsonObject.getString("software");

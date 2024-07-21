@@ -1,5 +1,6 @@
 package dev.mkomarov.multimediatagger.ui.uicontrollers;
 
+import dev.mkomarov.multimediatagger.json.JsonTagDeserializer;
 import dev.mkomarov.multimediatagger.json.JsonTagSerializer;
 import dev.mkomarov.multimediatagger.ui.elements.FileExplorerListElement;
 import dev.mkomarov.multimediatagger.utils.FileUtil;
@@ -104,14 +105,14 @@ public class MainPageController {
         Object selectedItem = filesListView.getSelectionModel().getSelectedItem();
 
         if (selectedItem == null) throw new RuntimeException("No file selected");
-        if (selectedItem.getClass() != File.class) throw new RuntimeException("Selected item is not a file");
-        currentFile = (File) selectedItem;
+        if (selectedItem.getClass() != FileExplorerListElement.class) throw new RuntimeException("Selected item is not a file");
+        currentFile = ((FileExplorerListElement) selectedItem).getFile();
         checkFile(currentFile);
 
         imageView.setImage(new Image(currentFile.toURI().toString()));
 
         currentTags.clear();
-        currentTags.addAll(tagUtil.getTagsFromFile(currentFile));
+        currentTags.addAll(JsonTagDeserializer.deserializeTagsForFile(currentFile));
         updateTagsList();
     }
 

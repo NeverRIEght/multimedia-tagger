@@ -15,9 +15,11 @@ public class FileExplorerListElement extends HBox {
     private Label detailsLabel1;
     private Label detailsLabel2;
     private Label detailsLabel3;
+    private File file;
 
     public FileExplorerListElement(File file) {
         if (file == null || !file.exists()) return;
+        this.file = file;
 
         if (file.isFile()) {
             Image fileImage = new Image(file.toURI().toString());
@@ -30,7 +32,6 @@ public class FileExplorerListElement extends HBox {
             detailsLabel2 = new Label(FileUtil.getFileExtension(file).toUpperCase());
             detailsLabel3 = new Label(file.length() + " bytes");
         } else if (file.isDirectory()) {
-            iconView = null;
             iconView.setFitWidth(60);
 
             titleLabel = new Label(file.getName());
@@ -49,5 +50,9 @@ public class FileExplorerListElement extends HBox {
         this.getChildren().addAll(iconView, detailsBox);
         this.setSpacing(10);
         this.setStyle("-fx-padding: 10; -fx-background-color: #d3d3d3; -fx-border-radius: 5; -fx-background-radius: 5;");
+    }
+
+    public File getFile() {
+        return file;
     }
 }
