@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Serializes tags to JSON format and saves them to a file.
@@ -25,7 +25,7 @@ public class JsonTagSerializer {
      * @param tags tags to serialize
      * @param forFile file to save tags for
      */
-    public static void serializeTagsForFile(List<Tag> tags, File forFile) {
+    public static void serializeTagsForFile(Collection<Tag> tags, File forFile) {
         JSONObject forFileJsonObject = new JSONObject();
         forFileJsonObject.put("fileName", forFile.getName());
         forFileJsonObject.put("software", SOFTWARE_NAME);
@@ -41,7 +41,7 @@ public class JsonTagSerializer {
         return forFile.getName() + ".json";
     }
 
-    private static JSONArray serializeTags(List<Tag> tags) {
+    private static JSONArray serializeTags(Collection<Tag> tags) {
         JSONArray jsonTags = new JSONArray();
         for (Tag tag : tags) {
             jsonTags.put(serializeTag(tag));
