@@ -4,8 +4,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +11,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FileUtil {
+
+    private FileUtil() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
     public static File getFile(String path) {
         File file = Paths.get(path).toFile();
         return checkFile(file);
@@ -76,19 +79,6 @@ public class FileUtil {
         }
 
         return files;
-    }
-
-    public static void writeJsonFile(File jsonFile, String json) {
-        try (FileWriter writer = new FileWriter(jsonFile)) {
-            writer.write(json);
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private FileUtil() {
-        throw new UnsupportedOperationException("Utility class");
     }
 
     /**
