@@ -42,8 +42,7 @@ public class FileExplorerListElement extends HBox {
         }
 
         iconView.setFitHeight(60);
-        titleLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
+        titleLabel.setStyle("-fx-font-family: Arial; -fx-font-size: 18px; -fx-font-weight: 600; -fx-line-height: 21px; -fx-text-alignment: left; -fx-text-fill: #1F1F1F;");
         VBox detailsBox = new VBox(titleLabel, detailsLabel1, detailsLabel2, detailsLabel3);
         detailsBox.setSpacing(5);
 
