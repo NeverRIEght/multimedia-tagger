@@ -32,9 +32,8 @@ public class JsonTagSerializer {
         forFileJsonObject.put("tagSystemVersion", STANDARD_VERSION);
         forFileJsonObject.put("tags", serializeTags(tags));
 
-        String json = getJsonString(forFileJsonObject);
         String jsonFilePath = getJsonFilePath(forFile);
-        saveJsonAsFile(json, jsonFilePath);
+        saveJsonAsFile(forFileJsonObject, jsonFilePath);
     }
 
     private static String getJsonFilePath(File forFile) {
@@ -56,13 +55,14 @@ public class JsonTagSerializer {
         return jsonTag;
     }
 
-    private static String getJsonString(JSONObject jsonObject) {
-        return jsonObject.toString(4);
+    private static void saveJsonAsFile(JSONObject jsonObject, String filePath) {
+        String jsonString = JsonUtil.getJsonAsString(jsonObject);
+        saveJsonAsFile(jsonString, filePath);
     }
 
-    private static void saveJsonAsFile(String json, String filePath) {
+    private static void saveJsonAsFile(String jsonString, String filePath) {
         try (FileWriter writer = new FileWriter(filePath)) {
-            writer.write(json);
+            writer.write(jsonString);
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
