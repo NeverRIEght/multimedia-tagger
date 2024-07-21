@@ -1,5 +1,6 @@
 package dev.mkomarov.multimediatagger.ui.uicontrollers;
 
+import dev.mkomarov.multimediatagger.json.JsonTagSerializer;
 import dev.mkomarov.multimediatagger.ui.elements.FileExplorerListElement;
 import dev.mkomarov.multimediatagger.utils.FileUtil;
 import dev.mkomarov.multimediatagger.utils.TagUtil;
@@ -130,12 +131,7 @@ public class MainPageController {
     }
 
     public void saveData() {
-//        checkFile(currentFile);
-//
-//        String jsonString = tagController.serializeTagsToJson(currentTags.stream().toList());
-//        File jsonFile = tagController.getJsonFile(currentFile);
-//        if (jsonFile == null) throw new RuntimeException("Json file is null");
-//
-//        FileUtil.writeJsonFile(jsonFile, jsonString);
+        checkFile(currentFile);
+        JsonTagSerializer.serializeTagsForFile(currentTags, currentFile);
     }
 }
