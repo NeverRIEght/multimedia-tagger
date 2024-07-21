@@ -9,12 +9,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 
+import static dev.mkomarov.multimediatagger.json.JsonUtil.SOFTWARE_NAME;
+import static dev.mkomarov.multimediatagger.json.JsonUtil.STANDARD_VERSION;
+
 /**
  * Serializes tags to JSON format and saves them to a file.
  */
 public class JsonTagSerializer {
-    private static final String SOFTWARE_NAME = "MultimediaTagger";
-    private static final String STANDARD_VERSION = "1.0";
 
     private JsonTagSerializer() {
     }
