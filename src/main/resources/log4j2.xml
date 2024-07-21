@@ -2,7 +2,7 @@
 <Configuration status="WARN">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss} %-5level %logger{36} - %msg%n"/>
+            <PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss} %-5levelThread:%t Logger:%logger{36} - %msg%n"/>
         </Console>
     </Appenders>
     <Loggers>
