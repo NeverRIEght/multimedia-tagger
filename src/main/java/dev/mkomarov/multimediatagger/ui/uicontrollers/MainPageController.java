@@ -2,17 +2,16 @@ package dev.mkomarov.multimediatagger.ui.uicontrollers;
 
 import dev.mkomarov.multimediatagger.json.JsonTagDeserializer;
 import dev.mkomarov.multimediatagger.json.JsonTagSerializer;
+import dev.mkomarov.multimediatagger.mediaobject.Image;
 import dev.mkomarov.multimediatagger.ui.elements.FilesGridView;
 import dev.mkomarov.multimediatagger.utils.FileUtil;
-import dev.mkomarov.multimediatagger.utils.TagUtil;
-import dev.mkomarov.multimediatagger.entities.Tag;
+import dev.mkomarov.multimediatagger.tag.TagParser;
+import dev.mkomarov.multimediatagger.tag.Tag;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
@@ -26,13 +25,11 @@ import static dev.mkomarov.multimediatagger.utils.FileUtil.checkFile;
 public class MainPageController {
     public Button selectFolderButton;
     public Label currentFolderLabel;
-    public FilesGridView galleryPane;
+    public FilesGridView imagesGallery;
     public TextField tagsInputField;
     public ListView<Tag> tagsListView;
     public ImageView imageView;
     public GridPane leftGrid;
-
-    private final TagUtil tagUtil = new TagUtil();
 
     public File currentFile;
 
@@ -41,12 +38,12 @@ public class MainPageController {
 
     public void initialize() {
         setAutoCompletionNavigation();
-        galleryPane = new FilesGridView();
-        leftGrid.add(galleryPane, 0, 1);
-        GridPane.setColumnSpan(galleryPane, 2);
-        galleryPane.setOnMouseClicked(event -> {
-            currentFile = galleryPane.getSelectedFile();
-            filesListViewClicked();
+        imagesGallery = new FilesGridView();
+        leftGrid.add(imagesGallery, 0, 1);
+        GridPane.setColumnSpan(imagesGallery, 2);
+        imagesGallery.setOnMouseClicked(event -> {
+            currentFile = imagesGallery.getSelectedFile();
+            imagesGalleryClicked();
         });
     }
 
@@ -95,28 +92,23 @@ public class MainPageController {
 
         List<File> files = FileUtil.getImages(initialFolder);
 
-        allTags.addAll(tagUtil.getTagsFromFiles(files));
+        allTags.addAll(TagParser.getTagsFromFiles(files));
 
-        updateFilesListView(files);
+        updateImagesGallery(files);
         updateAutoCompletionProperties();
     }
 
-    private void updateFilesListView(List<File> files) {
-        galleryPane.getChildren().clear();
-        List<dev.mkomarov.multimediatagger.entities.Image> images = new ArrayList<>();
+    private void updateImagesGallery(List<File> files) {
+        imagesGallery.getChildren().clear();
+        List<Image> images = new ArrayList<>();
         for (File file : files) {
-            images.add(new dev.mkomarov.multimediatagger.entities.Image(file.getAbsolutePath()));
+            images.add(new Image(file.getAbsolutePath()));
         }
-        galleryPane.setElements(images);
+        imagesGallery.setElements(images);
     }
 
-    public void filesListViewClicked() {
+    public void imagesGalleryClicked() {
         tagsListView.getItems().clear();
-//        Object selectedItem = filesListView.getSelectionModel().getSelectedItem();
-//
-//        if (selectedItem == null) throw new RuntimeException("No file selected");
-//        if (selectedItem.getClass() != FileExplorerListElement.class) throw new RuntimeException("Selected item is not a file");
-//        currentFile = ((FileExplorerListElement) selectedItem).getFile();
         checkFile(currentFile);
 
         imageView.setImage(new Image(currentFile.toURI().toString()));
@@ -127,7 +119,7 @@ public class MainPageController {
     }
 
     private void addTag(String tagText) {
-        Tag currentTag = tagUtil.parseTagText(tagText);
+        Tag currentTag = TagParser.parseTagText(tagText);
         currentTags.add(currentTag);
         allTags.add(currentTag);
         updateAutoCompletionProperties();

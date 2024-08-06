@@ -1,32 +1,38 @@
-package dev.mkomarov.multimediatagger.utils;
+package dev.mkomarov.multimediatagger.tag;
 
-import dev.mkomarov.multimediatagger.entities.Tag;
+import dev.mkomarov.multimediatagger.json.JsonTagDeserializer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import static dev.mkomarov.multimediatagger.utils.FileUtil.getFile;
 
-public class TagUtil {
+public class TagParser {
 
-    public Tag parseTagText(String tagText) {
+    private TagParser() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    public static Tag parseTagText(String tagText) {
         if (tagText == null || tagText.isEmpty()) throw new RuntimeException("Tag text is empty");
+        tagText = tagText.trim();
 
         if (!tagText.contains("/")) return new Tag(tagText);
 
         String[] tagParts = tagText.split("/");
         if (tagParts.length != 2) throw new RuntimeException("Invalid tag format");
-        String tagType = tagParts[0].trim();
-        String tagValue = tagParts[1].trim();
+        String tagType = tagParts[0];
+        String tagValue = tagParts[1];
 
         Tag.TagType parsedTagType = parseTagType(tagType);
 
         return new Tag(parsedTagType, tagValue);
     }
 
-    private Tag.TagType parseTagType(String tagTypeString) {
+    private static Tag.TagType parseTagType(String tagTypeString) {
         return switch (tagTypeString) {
             case "char", "character", "person", "per", "pers" -> Tag.TagType.PERSON;
             case "clothes", "clothing" -> Tag.TagType.CLOTHES;
@@ -43,48 +49,26 @@ public class TagUtil {
         };
     }
 
-    public List<Tag> getTagsFromFile(String path) {
+    public static Collection<Tag> getTagsFromFile(String path) {
         File file = getFile(path);
         return getTagsFromFile(file);
     }
 
-    public List<Tag> getTagsFromFile(File file) {
-        File jsonFile = getJsonFile(file);
+    public static Collection<Tag> getTagsFromFile(File fromFile) {
+        File jsonFile = getJsonMetadataFile(fromFile);
         if (!jsonFile.exists()) return Collections.emptyList();
-//        return getTagsFromJson(jsonFile);
-        return Collections.emptyList();
+        return JsonTagDeserializer.deserializeTagsForFile(fromFile);
     }
 
-    public List<Tag> getTagsFromFiles(List<File> files) {
+    public static List<Tag> getTagsFromFiles(List<File> fromFiles) {
         List<Tag> tagsList = new ArrayList<>();
-        for (File file : files) {
+        for (File file : fromFiles) {
             tagsList.addAll(getTagsFromFile(file));
         }
         return tagsList;
     }
 
-//    public List<Tag> getTagsFromJson(File jsonFile) {
-//        if (!jsonFile.exists()) throw new RuntimeException("File not found: " + jsonFile.getAbsolutePath());
-//
-//        List<Tag> tagsList = new ArrayList<>();
-//
-//        try (FileReader fileReader = new FileReader(jsonFile)) {
-//            Gson gson = new Gson();
-//            Tag[] tagsArray = gson.fromJson(fileReader, Tag[].class);
-//            Collections.addAll(tagsList, tagsArray);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return tagsList;
-//    }
-//
-//    public String serializeTagsToJson(List<Tag> tags) {
-//        Gson gson = new Gson();
-//        return gson.toJson(tags);
-//    }
-
-    public File getJsonFile(File file) {
+    public static File getJsonMetadataFile(File file) {
         return new File(file.getParent() + File.separator + file.getName() + "_mtdata.json");
     }
 }

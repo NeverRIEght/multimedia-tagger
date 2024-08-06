@@ -1,6 +1,6 @@
 package dev.mkomarov.multimediatagger.json;
 
-import dev.mkomarov.multimediatagger.entities.Tag;
+import dev.mkomarov.multimediatagger.tag.Tag;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,6 +18,7 @@ import static dev.mkomarov.multimediatagger.json.JsonUtil.STANDARD_VERSION;
 public class JsonTagSerializer {
 
     private JsonTagSerializer() {
+        throw new IllegalStateException("Utility class");
     }
 
     /**

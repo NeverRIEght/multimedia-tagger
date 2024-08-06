@@ -1,6 +1,6 @@
 package dev.mkomarov.multimediatagger.ui.elements;
 
-import dev.mkomarov.multimediatagger.entities.Image;
+import dev.mkomarov.multimediatagger.mediaobject.Image;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

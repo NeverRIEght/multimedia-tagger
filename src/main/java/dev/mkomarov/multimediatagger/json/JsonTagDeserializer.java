@@ -1,6 +1,6 @@
 package dev.mkomarov.multimediatagger.json;
 
-import dev.mkomarov.multimediatagger.entities.Tag;
+import dev.mkomarov.multimediatagger.tag.Tag;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,7 +18,9 @@ import static dev.mkomarov.multimediatagger.json.JsonUtil.SOFTWARE_NAME;
  * Deserializes tags from JSON file
  */
 public class JsonTagDeserializer {
+
     private JsonTagDeserializer() {
+        throw new IllegalStateException("Utility class");
     }
 
     public static Collection<Tag> deserializeTagsForFile(File forFile) {

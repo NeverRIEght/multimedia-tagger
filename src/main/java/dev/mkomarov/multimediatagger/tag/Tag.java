@@ -1,4 +1,4 @@
-package dev.mkomarov.multimediatagger.entities;
+package dev.mkomarov.multimediatagger.tag;
 
 import java.util.Objects;
 
