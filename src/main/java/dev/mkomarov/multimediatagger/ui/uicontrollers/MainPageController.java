@@ -2,7 +2,7 @@ package dev.mkomarov.multimediatagger.ui.uicontrollers;
 
 import dev.mkomarov.multimediatagger.json.JsonTagDeserializer;
 import dev.mkomarov.multimediatagger.json.JsonTagSerializer;
-import dev.mkomarov.multimediatagger.ui.elements.FileExplorerListElement;
+import dev.mkomarov.multimediatagger.ui.elements.FilesGridView;
 import dev.mkomarov.multimediatagger.utils.FileUtil;
 import dev.mkomarov.multimediatagger.utils.TagUtil;
 import dev.mkomarov.multimediatagger.entities.Tag;
@@ -12,6 +12,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
@@ -24,20 +26,28 @@ import static dev.mkomarov.multimediatagger.utils.FileUtil.checkFile;
 public class MainPageController {
     public Button selectFolderButton;
     public Label currentFolderLabel;
-    public ListView<FileExplorerListElement> filesListView;
+    public FilesGridView galleryPane;
     public TextField tagsInputField;
     public ListView<Tag> tagsListView;
     public ImageView imageView;
+    public GridPane leftGrid;
 
     private final TagUtil tagUtil = new TagUtil();
 
-    private File currentFile;
+    public File currentFile;
 
     private Set<Tag> allTags = new HashSet<>();
     private Set<Tag> currentTags = new HashSet<>();
 
     public void initialize() {
         setAutoCompletionNavigation();
+        galleryPane = new FilesGridView();
+        leftGrid.add(galleryPane, 0, 1);
+        GridPane.setColumnSpan(galleryPane, 2);
+        galleryPane.setOnMouseClicked(event -> {
+            currentFile = galleryPane.getSelectedFile();
+            filesListViewClicked();
+        });
     }
 
     private void setAutoCompletionNavigation() {
@@ -92,21 +102,21 @@ public class MainPageController {
     }
 
     private void updateFilesListView(List<File> files) {
-        filesListView.setStyle("-fx-control-inner-background: #313338;");
-        filesListView.getItems().clear();
+        galleryPane.getChildren().clear();
+        List<dev.mkomarov.multimediatagger.entities.Image> images = new ArrayList<>();
         for (File file : files) {
-            FileExplorerListElement element = new FileExplorerListElement(file);
-            filesListView.getItems().add(element);
+            images.add(new dev.mkomarov.multimediatagger.entities.Image(file.getAbsolutePath()));
         }
+        galleryPane.setElements(images);
     }
 
     public void filesListViewClicked() {
         tagsListView.getItems().clear();
-        Object selectedItem = filesListView.getSelectionModel().getSelectedItem();
-
-        if (selectedItem == null) throw new RuntimeException("No file selected");
-        if (selectedItem.getClass() != FileExplorerListElement.class) throw new RuntimeException("Selected item is not a file");
-        currentFile = ((FileExplorerListElement) selectedItem).getFile();
+//        Object selectedItem = filesListView.getSelectionModel().getSelectedItem();
+//
+//        if (selectedItem == null) throw new RuntimeException("No file selected");
+//        if (selectedItem.getClass() != FileExplorerListElement.class) throw new RuntimeException("Selected item is not a file");
+//        currentFile = ((FileExplorerListElement) selectedItem).getFile();
         checkFile(currentFile);
 
         imageView.setImage(new Image(currentFile.toURI().toString()));

@@ -1,5 +1,8 @@
 package dev.mkomarov.multimediatagger;
 
+import dev.mkomarov.multimediatagger.utils.FileUtil;
+
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
@@ -59,6 +62,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-
+        System.out.println(System.getenv("SONAR_TOKEN"));
     }
 }

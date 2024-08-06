@@ -18,7 +18,7 @@
     <rowConstraints>
         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
     </rowConstraints>
-    <GridPane>
+    <GridPane fx:id="leftGrid">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -30,7 +30,6 @@
         </rowConstraints>
         <Button fx:id="selectFolderButton" mnemonicParsing="false" onMouseClicked="#selectFolderButtonClicked" style="-fx-background-color: #313338; -fx-text-fill: white;" text="Select Folder" />
         <Label fx:id="currentFolderLabel" style="-fx-text-fill: white;" text="Current Folder: " GridPane.columnIndex="1" />
-        <ListView fx:id="filesListView" onMouseClicked="#filesListViewClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #313338;" GridPane.columnSpan="2" GridPane.rowIndex="1" />
     </GridPane>
     <GridPane GridPane.columnIndex="1">
         <columnConstraints>
